@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 const AddSupDirector = () => {
@@ -9,12 +9,14 @@ const AddSupDirector = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-
-    const addSup = async (e) => {
+    useEffect(() => {
         const accesToken = localStorage.getItem("accessToken_dir");
         if (accesToken === undefined || accesToken === null || accesToken === 0) {
             navigate('/director/login')
         }
+    },[])
+    const addSup = async (e) => {
+    const accesToken = localStorage.getItem("accessToken_dir");
         e.preventDefault();
         const formData = new FormData();
         formData.append('fullname', fullName);
@@ -58,7 +60,7 @@ const AddSupDirector = () => {
                         </div>
                         
                         <div className='form-controle'>
-                            <input type="text" name="destinataire" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Entrer le mot de pass" />
+                            <input type="password" name="destinataire" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Entrer le mot de pass" />
                         </div>
                         <div className="form-controle">
                             <button className='btn'>Ajouter cette fichier</button>

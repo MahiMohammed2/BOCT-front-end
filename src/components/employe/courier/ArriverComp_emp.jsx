@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import ArrExport from '../../export/ArrExport';
+import jsPDF from 'jspdf';
 
 const ArriverComp_emp = () => {
     const [Arriver, setArriver] = useState([]);
@@ -24,6 +26,9 @@ const ArriverComp_emp = () => {
         }
         affiche();
     }, []);
+    const print = () =>{
+        return <ArrExport numero={1}/>
+    }
     return (
         <div>
             <table className='table'>
@@ -46,6 +51,7 @@ const ArriverComp_emp = () => {
                     <th className='space-header'></th>
                     <th className='bordred-head'>Date de fichier</th>
                     <th className='space-header'></th>
+                    <th className='space-header'></th>
                 </tr>
                 {
                     Arriver.map((e) => {
@@ -66,6 +72,7 @@ const ArriverComp_emp = () => {
                                 <td></td>
                                 <td>{e.date_de_fichier}</td>
                                 <td></td>
+                                <td><button onClick={print}>print</button></td>
                             </tr>
                         )
                     })

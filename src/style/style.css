@@ -128,7 +128,9 @@ body{
     align-items: center;
     gap: 40px;
 }
-
+.left-side h5{
+    cursor: context-menu;
+}
 .search-bar {
     display: flex;
     flex-direction: row;

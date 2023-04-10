@@ -16,10 +16,6 @@ const DirectorLayout = () => {
 
                     <img className='logo-royal-maroc' src='../royal-maroc.png' />
                     <h5>Bureau d'order</h5>
-                    <div className='search-bar'>
-                        <i className="pi pi-search logo-search"></i>
-                        <input type="text" className='search' placeholder='Rechrcher des fichier avec le : numero, interet, employer' />
-                    </div>
                 </div>
                 <div className='right-side'>
                     <Show person={"director"} />

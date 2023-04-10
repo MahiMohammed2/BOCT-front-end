@@ -69,6 +69,9 @@ import TechniqueLayout from './page/Admin/Technique/TechniqueLayout';
 import TechniqueEmp from './components/admin/technique/TechniqueEmp';
 import TechniqueArr from './components/admin/technique/TechniqueArr';
 import TechniqueDep from './components/admin/technique/TechniqueDep';
+import ExportArriver from './components/export/ExportArriver';
+import ExportDepart from './components/export/ExportDepart';
+import ArrExport from './components/export/ArrExport';
 
 
 const router = createBrowserRouter(
@@ -185,6 +188,8 @@ const router = createBrowserRouter(
         { element: <AdminiLogin />, path: "/administrative/login", index: true },
         { element: <FinenLogin />, path: "/finenciere/login", index: true },
         { element: <TechLogin />, path: "/technique/login", index: true },
+        {element: <ArrExport numero={2}/>,path:"/fff"},
+        {element: <ExportDepart/>, path: "/export/depart"},
       ]
     }
 
