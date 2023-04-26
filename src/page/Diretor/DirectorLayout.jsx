@@ -1,13 +1,26 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { BsFillPersonFill } from 'react-icons/bs'
-import { RiAdminFill, RiFolderAddFill } from 'react-icons/ri'
+import { RiAdminFill } from 'react-icons/ri'
 import { IoIosArchive } from 'react-icons/io'
-import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { NavLink, Outlet } from 'react-router-dom'
 import Show from '../../components/Itemes/Show'
 import { HiUserAdd } from 'react-icons/hi'
+import Translate from '../../static/DataLanguage.json';
+import { useEffect } from 'react'
+import { useState } from 'react'
 
 const DirectorLayout = () => {
+    const [contente, setContente] = useState("");
 
+    useEffect(() => {
+        const lang = localStorage.getItem('lang');
+        if (lang === "ar") {
+            setContente(Translate.العربية)
+
+        } else {
+            setContente(Translate.Français)
+        }
+    })
     return (
 
         <div className='container'>
@@ -15,7 +28,7 @@ const DirectorLayout = () => {
                 <div className='left-side'>
 
                     <img className='logo-royal-maroc' src='../royal-maroc.png' />
-                    <h5>Bureau d'order</h5>
+                    <h5>{contente.bureau}</h5>
                 </div>
                 <div className='right-side'>
                     <Show person={"director"} />
@@ -24,12 +37,12 @@ const DirectorLayout = () => {
 
             <div className='grid-container'>
                 <nav className='left-bar'>
-                    <NavLink to="/director/addSuperadmin"><button className='btn-add'><HiUserAdd className='logo-icon' /> Ajouter un{'(e)'} director de bureau d'order</button></NavLink>
-                    <NavLink to='/director/superadmin' className='childrens'><IoIosArchive className='logo-icon' />Admin de bureau d'order</NavLink>
-                    <NavLink to='/director/administrative' className='childrens'><RiAdminFill className='logo-icon' />Adminnistrative</NavLink>
-                    <NavLink to='/director/finencier' className='childrens'><RiAdminFill className='logo-icon' />Financiere</NavLink>
-                    <NavLink to='/director/technique' className='childrens'><RiAdminFill className='logo-icon' />Technique</NavLink>
-                    <NavLink to='/director/employe' className='childrens'><BsFillPersonFill className='logo-icon' />Employes</NavLink>
+                    <NavLink to="/director/addSuperadmin"><button className='btn-add'><HiUserAdd className='logo-icon' />{contente.ajouter_admin_bureau}</button></NavLink>
+                    <NavLink to='/director/superadmin' className='childrens'><IoIosArchive className='logo-icon' />{contente.admin_bureau}</NavLink>
+                    <NavLink to='/director/administrative' className='childrens'><RiAdminFill className='logo-icon' />{contente.administrative}</NavLink>
+                    <NavLink to='/director/finencier' className='childrens'><RiAdminFill className='logo-icon' />{contente.financiere}</NavLink>
+                    <NavLink to='/director/technique' className='childrens'><RiAdminFill className='logo-icon' />{contente.technique}</NavLink>
+                    <NavLink to='/director/employe' className='childrens'><BsFillPersonFill className='logo-icon' />{contente.employes}</NavLink>
                 </nav>
                 <Outlet />
             </div>

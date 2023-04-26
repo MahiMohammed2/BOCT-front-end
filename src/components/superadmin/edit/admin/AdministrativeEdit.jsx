@@ -1,6 +1,7 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
+import Translate from '../../../../static/DataLanguage.json';
 
 const AdministrativeEdit = () => {
   const { id } = useParams();
@@ -10,6 +11,8 @@ const AdministrativeEdit = () => {
   const [password, setPassword] = useState("");
   const [message,setMessage] = useState("");
   const [boolean, setBoolean] = useState(false)
+  const [contente, setContente] = useState("");
+
   const navigate = useNavigate();
   
   const editAdmin = async (e) => {
@@ -41,46 +44,45 @@ const AdministrativeEdit = () => {
       setBoolean(true)
     })
   }
+  useEffect(() => {
+    const lang = localStorage.getItem('lang');
+    if (lang === "ar") {
+        setContente(Translate.العربية)
 
+    } else {
+        setContente(Translate.Français)
+    }
+})
   return (
-    <div>
-      <form onSubmit={editAdmin}>
-      
-        <br />
-        <div className="form form-container">
-          <h1>Modification d'admin administrative numero : {id}</h1>
-          <div className='message-controle'>
-            {
-              boolean ?
-                <div className='message'>{message} <NavLink to="/superadmin/administrative">Return</NavLink></div>
-                : ""
-            }
-          </div>
-          <div className='form-controle childe-1'>
-            <input type='text' name='fullname' value={fullname} onChange={(e) => { setFullName(e.target.value) }} placeholder='Entrer le nom complete' />
-            <span className='info-text'>Entrer le nom complete d'admin *</span>
+    <div >
+      <form onSubmit={editAdmin} className='form-edit'>
+          <h1>{contente.edit_administrative} : {id}</h1>
+          <div className="form form-container">
+          <div className='form-controle '>
+            <input type='text' name='fullname' value={fullname} onChange={(e) => { setFullName(e.target.value) }} placeholder={contente.entrer_nom_complete} />
+            <span className='info-text'>{contente.entrer_nom_complete_admin} *</span>
           </div>
 
-          <div className="form-controle childe-2">
-            <input type='text' name='CIN' value={CIN} onChange={(e) => { setCIN(e.target.value) }} placeholder='Entrer le CIN' />
-            <span className='info-text'>Entrer le CIN d'admin {'(minimume de charactere est 6)'} *</span>
+          <div className="form-controle">
+            <input type='text' name='CIN' value={CIN} onChange={(e) => { setCIN(e.target.value) }} placeholder={contente.entrer_CIN} />
+            <span className='info-text'>{contente.entrer_CIN_admin} *</span>
           </div>
 
-          <div className="form-controle childe-3">
-            <input type='email' name='email' value={email} onChange={(e) => { setEmail(e.target.value) }} placeholder="Entrer l'address email" />
-            <span className='info-text'>Entrer l'address mail d'admin *</span>
+          <div className="form-controle">
+            <input type='email' name='email' value={email} onChange={(e) => { setEmail(e.target.value) }} placeholder={contente.entrer_email} />
+            <span className='info-text'>{contente.entrer_email_admin} *</span>
           </div>
 
-          <div className="form-controle childe-4">
-            <input type='password' name='password' value={password} onChange={(e) => { setPassword(e.target.value) }} placeholder='Entrer le mot de pass' />
-            <span className='info-text'>Entre le password d'admin {'(minimume de charactere est 8)'}*</span>
+          <div className="form-controle">
+            <input type='password' name='password' value={password} onChange={(e) => { setPassword(e.target.value) }} placeholder={contente.entrer_password} />
+            <span className='info-text'>{contente.entrer_password_admin} *</span>
           </div>
           <div className="form-controle">
             <div className='btn-controle'>
-              <button className='btn btn-primary'>Ajouter cette admin </button>
+              <button className='btn btn-primary'>{contente.ajouter_admin}</button>
             </div>
           </div>
-          <span>{'(*)'} : requis d'entre les informations ici</span>
+          <span>{contente.required_message}</span>
         </div>
 
       </form>

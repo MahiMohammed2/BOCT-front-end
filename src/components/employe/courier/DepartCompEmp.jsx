@@ -1,14 +1,14 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { MdNavigateBefore, MdNavigateNext } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
+import { AiFillPrinter } from 'react-icons/ai'
 import Translate from '../../../static/DataLanguage.json';
-import { AiFillPrinter } from 'react-icons/ai';
+import { MdNavigateBefore, MdNavigateNext } from 'react-icons/md';
 
-const FinenciereDep = () => {
+const DepartCompEmp = () => {
+    const [contente, setContente] = useState("");
     const [Depart, setDepart] = useState([]);
     const navigate = useNavigate();
-    const [contente, setContente] = useState("");
     const [curentPage, setCurentPage] = useState(1);
     const recordsPages = 18;
     const lastIndex = curentPage * recordsPages;
@@ -17,23 +17,38 @@ const FinenciereDep = () => {
     const [hundler, setHundler] = useState(false);
     useEffect(() => {
         const affiche = async () => {
-            const accesToken = localStorage.getItem("accessToken_finenciere");
+            const accesToken = localStorage.getItem("accessToken_emp");
             console.log(accesToken);
             if (accesToken === "undefined" || accesToken === null || accesToken === 0 || accesToken === false) {
-                navigate('/finenciere/login')
+                navigate('/employe/login')
             }
             const res = await axios({
                 method: "get",
-                url: "http://localhost:8000/api/admin/finenciere/",
+                url: "http://localhost:8000/api/employe/",
                 headers: {
                     "Accept": "application/json",
                     "Authorization": 'Bearer ' + accesToken
                 }
             })
-            setDepart(res.data.depart)
+            setDepart(res.data.Depart)
         }
         affiche();
     }, []);
+
+    const navigEprt = (e) => {
+        navigate('/export/depart/' + e)
+    }
+
+    useEffect(() => {
+        const lang = localStorage.getItem('lang');
+        if (lang === "ar") {
+            setContente(Translate.العربية)
+
+        } else {
+            setContente(Translate.Français)
+        }
+    })
+
     const records = Depart.slice(firstIndex, lastIndex);
     const nPages = Math.ceil(Depart.length / recordsPages)
 
@@ -46,18 +61,6 @@ const FinenciereDep = () => {
         if (curentPage !== nPages) {
             setCurentPage(curentPage + 1)
         }
-    }
-    useEffect(() => {
-        const lang = localStorage.getItem('lang');
-        if (lang === "ar") {
-            setContente(Translate.العربية)
-
-        } else {
-            setContente(Translate.Français)
-        }
-    })
-    const navigEprt = (e) => {
-        navigate('/export/depart/' + e)
     }
     const Searching = (ev) => {
         const query = ev.target.value
@@ -73,7 +76,7 @@ const FinenciereDep = () => {
     return (
         <div>
             <table className='table'>
-            <tr>
+                <tr>
                     <th colSpan={30}>
                         <div className="header_controle">
                             <ul className='list_pagination'>
@@ -98,6 +101,8 @@ const FinenciereDep = () => {
                     <th className='bordred-head'>{contente.objectif}</th>
                     <th className='space-header'></th>
                     <th className='bordred-head'>{contente.expediteur}</th>
+                    <th className='space-header'></th>
+                    <th className='bordred-head'>{contente.type_class}</th>
                     <th className='space-header'></th>
                     <th className='bordred-head'>{contente.type_interet}</th>
                     <th className='space-header'></th>
@@ -125,7 +130,9 @@ const FinenciereDep = () => {
                                 <td></td>
                                 <td>{e.expediteur}</td>
                                 <td></td>
-                                <td className='ellipsis'><p>{e.interet}</p></td>
+                                <td>{e.type_de_class}</td>
+                                <td></td>
+                                <td>{e.interet}</td>
                                 <td></td>
                                 <td>{e.employere}</td>
                                 <td></td>
@@ -152,7 +159,9 @@ const FinenciereDep = () => {
                                 <td></td>
                                 <td>{e.expediteur}</td>
                                 <td></td>
-                                <td className='ellipsis'><p>{e.interet}</p></td>
+                                <td>{e.type_de_class}</td>
+                                <td></td>
+                                <td>{e.interet}</td>
                                 <td></td>
                                 <td>{e.employere}</td>
                                 <td></td>
@@ -174,4 +183,4 @@ const FinenciereDep = () => {
     )
 }
 
-export default FinenciereDep
+export default DepartCompEmp

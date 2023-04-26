@@ -1,27 +1,34 @@
+import ReactDOMServer from 'react-dom/server';
 import html2pdf from 'html2pdf.js/dist/html2pdf.min';
 import React, { useEffect, useState } from 'react'
+import jsPDF from 'jspdf';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import './styleFile.css';
 import Translate from '../../static/DataLanguage.json';
-const ArrExport = () => {
+const DepExport = () => {
   const [language, setLanguage] = useState("Français");
   const [contente, setContente] = useState("");
   const [fontArabic,setFontArabic] = useState(false);
   const { id } = useParams();
   const [arr, setArr] = useState([]);
   const navigate = useNavigate();
-  
   useEffect(() => {
     const affiche = async () => {
+      const accesToken = localStorage.getItem("accessToken_emp");
+      if (accesToken === undefined || accesToken === null || accesToken === 0 || accesToken === false) {
+        navigate('/employe/login')
+      }
       await axios({
         method: "get",
-        url: "http://localhost:8000/api/courier/arriver/" + id,
+        url: "http://localhost:8000/api/courier/depart/" + id,
         headers: {
           "Accept": "application/json",
+          "Authorization": 'Bearer ' + accesToken
         }
       }).then(res => {
         setArr(res.data.arriver)
+        console.log(res.data.arriver[0].interet);
       })
     }
     affiche();
@@ -86,7 +93,7 @@ return(
                   <span >{i.objectif}</span>
                 </div>
                 <div className='exp_footer'>
-                  <span>{contente.type_fichier.arriver}</span>
+                  <span>{contente.type_fichier.depart}</span>
                   <span>{contente.date.date_de_fichier} : {i.date_de_fichier}</span>
                 </div>
                 <div className='exp_signiature'>
@@ -104,4 +111,4 @@ return(
 )
 }
 
-export default ArrExport
+export default DepExport

@@ -49,9 +49,8 @@ const EmployeEdit = () => {
   return (
       <div className=''>
           <form onSubmit={addEmploye}>
-              <br />
-              <div className="form form-container">
                   <h1>Modifier l'employe numer : {id}</h1>
+              <div className="form form-container">
                   <div className='form-controle childe-1'>
                       <input type='text' name='fullname' value={fullname} onChange={(e) => { setFullName(e.target.value) }} placeholder='Entrer le nom complete' />
                       <span className='info-text'>Entrer le nom complete d'employe() *</span>

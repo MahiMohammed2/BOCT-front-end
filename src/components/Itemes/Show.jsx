@@ -4,8 +4,12 @@ import { Toast } from 'primereact/toast';
 import { Avatar } from 'primereact/avatar';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useState } from 'react';
+import Translate from '../../static/DataLanguage.json';
+import { useEffect } from 'react';
 
 const Show = ({ person }) => {
+    const [contente, setContente] = useState("");
     const menu = useRef(null);
     const toast = useRef(null);
 
@@ -162,7 +166,7 @@ const Show = ({ person }) => {
             localStorage.removeItem("accessToken_administrative");
             navigate('/administrative/login')
         }
-        
+
         //----------------------------------------
 
         else if (person === "finenciere") {
@@ -208,20 +212,28 @@ const Show = ({ person }) => {
             console.log("error of a guard you use in component show.jsx !!");
         }
     }
+    useEffect(() => {
+        const lang = localStorage.getItem('lang');
+        if (lang === "ar") {
+            setContente(Translate.العربية)
 
+        } else {
+            setContente(Translate.Français)
+        }
+    })
     const items = [
         {
-            label: 'Options',
+            label: contente.options,
             items: [
                 {
-                    label: 'Profile',
+                    label: contente.profile,
                     icon: 'pi pi-user',
                     command: () => {
                         navigation()
                     }
                 },
                 {
-                    label: 'Se Déconnecter',
+                    label: contente.deconnect,
                     icon: 'pi pi-sign-out',
                     command: () => {
                         logout()

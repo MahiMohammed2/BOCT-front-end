@@ -5,13 +5,29 @@ import { TbChairDirector } from 'react-icons/tb'
 import { IoIosArchive } from 'react-icons/io'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import Show from '../../components/Itemes/Show'
+import { useEffect } from 'react'
+import Translate from '../../static/DataLanguage.json';
+import { useState } from 'react'
 
 const PresidentLayout = () => {
     const navigate = useNavigate();
-    const accesToken = localStorage.getItem("accessToken_pre");
-    if (accesToken === "undefined" || accesToken === null || accesToken === 0) {
-        navigate('/president/login')
-    }
+    const [contente, setContente] = useState("");
+
+    useEffect(()=>{
+        const accesToken = localStorage.getItem("accessToken_pre");
+        if (accesToken === "undefined" || accesToken === null || accesToken === 0) {
+            navigate('/president/login')
+        }
+    })
+    useEffect(() => {
+        const lang = localStorage.getItem('lang');
+        if (lang === "ar") {
+            setContente(Translate.العربية)
+
+        } else {
+            setContente(Translate.Français)
+        }
+    })
     return (
 
         <div className='container'>
@@ -19,7 +35,7 @@ const PresidentLayout = () => {
                 <div className='left-side'>
 
                     <img className='logo-royal-maroc' src='../royal-maroc.png' />
-                    <h5>Bureau d'order</h5>
+                    <h5>{contente.bureau}</h5>
                 </div>
                 <div className='right-side'>
                     <Show person={"president"} />
@@ -28,14 +44,14 @@ const PresidentLayout = () => {
 
             <div className='grid-container'>
                 <nav className='left-bar'>
-                    <NavLink to='/president/arriver' className='childrens'><BsFileEarmarkArrowDownFill className='logo-icon' />Arriver</NavLink>
-                    <NavLink to='/president/depart' className='childrens'><BsFileEarmarkArrowUpFill className='logo-icon' />Depart</NavLink>
-                    <NavLink to='/president/directeur' className='childrens'><TbChairDirector className='logo-icon' />Directeur</NavLink>
-                    <NavLink to='/president/superadmin' className='childrens'><IoIosArchive className='logo-icon' />Admin de bureau d'order</NavLink>
-                    <NavLink to='/president/administrative' className='childrens'><RiAdminFill className='logo-icon' />Adminnistrative</NavLink>
-                    <NavLink to='/president/finencier' className='childrens'><RiAdminFill className='logo-icon' />Financiere</NavLink>
-                    <NavLink to='/president/technique' className='childrens'><RiAdminFill className='logo-icon' />Technique</NavLink>
-                    <NavLink to='/president/employe' className='childrens'><BsFillPersonFill className='logo-icon' />Employes</NavLink>
+                    <NavLink to='/president/arriver' className='childrens'><BsFileEarmarkArrowDownFill className='logo-icon' />{contente.arriver}</NavLink>
+                    <NavLink to='/president/depart' className='childrens'><BsFileEarmarkArrowUpFill className='logo-icon' />{contente.depart}</NavLink>
+                    <NavLink to='/president/directeur' className='childrens'><TbChairDirector className='logo-icon' />{contente.director}</NavLink>
+                    <NavLink to='/president/superadmin' className='childrens'><IoIosArchive className='logo-icon' />{contente.admin_bureau}</NavLink>
+                    <NavLink to='/president/administrative' className='childrens'><RiAdminFill className='logo-icon' />{contente.administrative}</NavLink>
+                    <NavLink to='/president/finencier' className='childrens'><RiAdminFill className='logo-icon' />{contente.financiere}</NavLink>
+                    <NavLink to='/president/technique' className='childrens'><RiAdminFill className='logo-icon' />{contente.technique}</NavLink>
+                    <NavLink to='/president/employe' className='childrens'><BsFillPersonFill className='logo-icon' />{contente.employes}</NavLink>
                 </nav>
                 <Outlet />
             </div>

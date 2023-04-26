@@ -2,6 +2,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import Translate from '../../../static/DataLanguage.json';
 
 const AddDepart = () => {
     const [dateFichier, setDateFichier] = useState('');
@@ -15,6 +16,7 @@ const AddDepart = () => {
     const [dateSpecifiee, setDateSpecifiee] = useState('');
     const navigate = useNavigate();
     const date = new Date().toISOString().slice(0, 10);
+    const [contente, setContente] = useState("");
 
     useEffect(() => {
         const accesToken = localStorage.getItem("accessToken_emp");
@@ -39,7 +41,7 @@ const AddDepart = () => {
         }
         affiche();
     }, []);
-    
+
     const addDepart = async (e) => {
 
         e.preventDefault();
@@ -57,7 +59,7 @@ const AddDepart = () => {
 
         const accesToken = localStorage.getItem("accessToken_emp");
 
-        if (accesToken === "undefined" || accesToken === 'null' ) {
+        if (accesToken === "undefined" || accesToken === 'null') {
             navigate('/employe/login')
         }
 
@@ -75,30 +77,39 @@ const AddDepart = () => {
         })
 
     }
+    useEffect(() => {
+        const lang = localStorage.getItem('lang');
+        if (lang === "ar") {
+            setContente(Translate.العربية)
+
+        } else {
+            setContente(Translate.Français)
+        }
+    })
     return (
         <div>
             <form onSubmit={addDepart}>
                 <div className='form form-container'>
                     <div className="full-childe">
                         <div className='form-controle'>
-                            <input type="text" name="expediteur" value={expediteur} onChange={(e) => setExpediteur(e.target.value)} placeholder="Entrer l'expediteur" />
+                            <input type="text" name="expediteur" value={expediteur} onChange={(e) => setExpediteur(e.target.value)} placeholder={contente.entrer_expediteur} />
                         </div>
                         <div className='form-controle'>
-                            <input type="text" name="type_de_courier" value={typeDeCourier} onChange={(e) => setTypeDeCourier(e.target.value)} placeholder="Entrer le type de courier" />
+                            <input type="text" name="type_de_courier" value={typeDeCourier} onChange={(e) => setTypeDeCourier(e.target.value)} placeholder={contente.entrer_type_courier} />
                         </div>
                         <div className="form-controle childe-6">
-                            <input type="date" name="date_de_commission" value={dateDeCommission} onChange={(e) => {setDateDeCommission(e.target.value)}} />
-                            <span className='info-text'>date de commission</span>
+                            <input type="date" name="date_de_commission" value={dateDeCommission} onChange={(e) => { setDateDeCommission(e.target.value) }} />
+                            <span className='info-text'>{contente.date_commission}</span>
                         </div>
                         <div className="form-controle">
                             <input type="date" name="date_specifiee" value={dateSpecifiee} onChange={(e) => setDateSpecifiee(e.target.value)} />
-                            <span className='info-text'>date specifiee</span>
+                            <span className='info-text'>{contente.date_specifie}</span>
                         </div>
                         <div className="object-controle">
-                            <textarea name="objectif" className='object' value={objectif} onChange={(e) => setObjectif(e.target.value)} placeholder="Entrer l'objet de fichier"></textarea>
+                            <textarea name="objectif" className='object' value={objectif} onChange={(e) => setObjectif(e.target.value)} placeholder={contente.entrer_objectife}></textarea>
                         </div>
                         <div className="form-controle">
-                            <button className='btn'>Ajouter cette fichier</button>
+                            <button className='btn'>{contente.ajouter_fichier}</button>
                         </div>
                     </div>
                 </div>

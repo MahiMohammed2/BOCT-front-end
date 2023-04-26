@@ -1,57 +1,28 @@
-import axios from 'axios';
-import React, { useEffect } from 'react'
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { AiOutlineSearch } from 'react-icons/ai';
-import { FaUserCircle } from 'react-icons/fa';
+import React, { useState , useEffect } from 'react'
+import { NavLink, Outlet} from 'react-router-dom';
 import { HiUserAdd } from 'react-icons/hi'
 import { RiAdminFill } from 'react-icons/ri'
 import { BsFileEarmarkArrowUpFill, BsFileEarmarkArrowDownFill, BsFillPersonFill } from 'react-icons/bs'
 import Show from '../../components/Itemes/Show';
+import Translate from '../../static/DataLanguage.json';
 const SupLayout = () => {
-
-    const navigate = useNavigate();
-
+    const [contente, setContente] = useState("");
     useEffect(() => {
-        const affiche = async () => {
-            const accesToken = localStorage.getItem("accessToken");
-            if (accesToken == "undefined" || accesToken === null || accesToken === 0) {
-                navigate('/superadmin/login')
-            }
-            await axios({
-                method: "get",
-                url: "http://localhost:8000/api/superadmin/",
-                headers: {
-                    "Accept": "application/json",
-                    "Authorization": 'Bearer ' + accesToken
-                }
-            })
-        }
-        affiche();
-    }, []);
-    const logout = () => {
-        const accesToken = localStorage.getItem("accessToken");
-        if (accesToken == "undefined" || accesToken === null || accesToken === 0) {
-            navigate('/superadmin/login')
-        }
-        axios({
-            method: 'delete',
-            url: 'http://localhost:8000/api/superadmin/logout',
-            headers: {
-                "Accept": "application/json",
-                "Authorization": 'Bearer ' + accesToken
-            }
-        })
+        const lang = localStorage.getItem('lang');
+        if (lang === "ar") {
+            setContente(Translate.العربية)
 
-        localStorage.removeItem("accessToken");
-        navigate('/superadmin/login')
-    }
+        } else {
+            setContente(Translate.Français)
+        }
+    })
     return (
         <div className='container'>
             <nav className='navbar'>
                 <div className='left-side'>
 
                     <img className='logo-royal-maroc' src='../royal-maroc.png' />
-                    <h5>Bureau d'order</h5>
+                    <h5>{contente.bureau_dorder}</h5>
                 </div>
                 <div className='right-side'>
                     <Show person={"superadmin"} />
@@ -61,14 +32,14 @@ const SupLayout = () => {
 
             <div className='grid-container'>
                 <nav className='left-bar'>
-                    <NavLink to="/superadmin/addadmin"><button className='btn-add'><HiUserAdd className='logo-icon' /> Ajouter un admin</button></NavLink>
-                    <NavLink to="/superadmin/addemploye"><button className='btn-add'><HiUserAdd className='logo-icon' /> Ajouter un employe</button></NavLink>
-                    <NavLink to='/superadmin/arriver' className='childrens'><BsFileEarmarkArrowDownFill className='logo-icon' />Arriver</NavLink>
-                    <NavLink to='/superadmin/depart' className='childrens'><BsFileEarmarkArrowUpFill className='logo-icon' />Depart</NavLink>
-                    <NavLink to='/superadmin/administrative' className='childrens'><RiAdminFill className='logo-icon' />Adminnistrative</NavLink>
-                    <NavLink to='/superadmin/financier' className='childrens'><RiAdminFill className='logo-icon' />Financiere</NavLink>
-                    <NavLink to='/superadmin/technique' className='childrens'><RiAdminFill className='logo-icon' />Technique</NavLink>
-                    <NavLink to='/superadmin/employes' className='childrens'><BsFillPersonFill className='logo-icon' />Employes</NavLink>
+                    <NavLink to="/superadmin/addadmin"><button className='btn-add'><HiUserAdd className='logo-icon' />{contente.ajouter_admin}</button></NavLink>
+                    <NavLink to="/superadmin/addemploye"><button className='btn-add'><HiUserAdd className='logo-icon' /> {contente.ajouter_employe}</button></NavLink>
+                    <NavLink to='/superadmin/arriver' className='childrens'><BsFileEarmarkArrowDownFill className='logo-icon' />{contente.arriver}</NavLink>
+                    <NavLink to='/superadmin/depart' className='childrens'><BsFileEarmarkArrowUpFill className='logo-icon' />{contente.depart}</NavLink>
+                    <NavLink to='/superadmin/administrative' className='childrens'><RiAdminFill className='logo-icon' />{contente.administrative}</NavLink>
+                    <NavLink to='/superadmin/financier' className='childrens'><RiAdminFill className='logo-icon' />{contente.financiere}</NavLink>
+                    <NavLink to='/superadmin/technique' className='childrens'><RiAdminFill className='logo-icon' />{contente.technique}</NavLink>
+                    <NavLink to='/superadmin/employes' className='childrens'><BsFillPersonFill className='logo-icon' />{contente.employes}</NavLink>
                 </nav>
                 <Outlet />
             </div>

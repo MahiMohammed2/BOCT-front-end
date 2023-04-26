@@ -1,13 +1,13 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { MdNavigateBefore, MdNavigateNext } from 'react-icons/md';
+import { AiFillPrinter } from 'react-icons/ai'
 import { useNavigate } from 'react-router-dom';
 import Translate from '../../../static/DataLanguage.json';
-import { AiFillPrinter } from 'react-icons/ai';
-const TechniqueArr = () => {
+import { MdNavigateBefore, MdNavigateNext } from 'react-icons/md';
+const ArriverCompEmp = () => {
+    const [contente, setContente] = useState("");
     const [Arriver, setArriver] = useState([]);
     const navigate = useNavigate();
-    const [contente, setContente] = useState("");
     const [curentPage, setCurentPage] = useState(1);
     const recordsPages = 18;
     const lastIndex = curentPage * recordsPages;
@@ -16,34 +16,31 @@ const TechniqueArr = () => {
     const [hundler, setHundler] = useState(false);
     useEffect(() => {
         const affiche = async () => {
-            const accesToken = localStorage.getItem("accessToken_technique");
-            if (accesToken === "undefined" || accesToken === null || accesToken === 0 || accesToken === false) {
-                navigate('/technique/login')
+            const accesToken = localStorage.getItem("accessToken_emp");
+            if (accesToken === undefined || accesToken === null || accesToken === 0 || accesToken === false) {
+                navigate('/employe/login')
             }
             const res = await axios({
                 method: "get",
-                url: "http://localhost:8000/api/admin/technique/",
+                url: "http://localhost:8000/api/employe/",
                 headers: {
                     "Accept": "application/json",
                     "Authorization": 'Bearer ' + accesToken
                 }
+            }).then((res) => {
+                setArriver(res.data.Arriver);
             })
-            setArriver(res.data.arriver)
         }
         affiche();
     }, []);
-    useEffect(() => {
-        const lang = localStorage.getItem('lang');
-        if (lang === "ar") {
-            setContente(Translate.العربية)
 
-        } else {
-            setContente(Translate.Français)
-        }
-    })
+
+
+    const navigEprt = (e) => {
+        navigate('/export/arriver/' + e)
+    }
     const records = Arriver.slice(firstIndex, lastIndex);
     const nPages = Math.ceil(Arriver.length / recordsPages)
-
     const prePage = () => {
         if (curentPage !== 1) {
             setCurentPage(curentPage - 1)
@@ -54,9 +51,15 @@ const TechniqueArr = () => {
             setCurentPage(curentPage + 1)
         }
     }
-    const navigEprt = (e) => {
-        navigate('/export/arriver/' + e)
-    }
+    useEffect(() => {
+        const lang = localStorage.getItem('lang');
+        if (lang === "ar") {
+            setContente(Translate.العربية)
+
+        } else {
+            setContente(Translate.Français)
+        }
+    })
     const Searching = (ev) => {
         const query = ev.target.value
         setFiltring(Arriver.filter(item =>
@@ -71,8 +74,8 @@ const TechniqueArr = () => {
     return (
         <div>
             <table className='table'>
-            <tr>
-                    <th colSpan={20}>
+                <tr>
+                    <th colSpan={19}>
                         <div className="header_controle">
                             <ul className='list_pagination'>
                                 <li>
@@ -108,56 +111,56 @@ const TechniqueArr = () => {
                     <th className='space-header'></th>
                 </tr>
                 {
-                    hundler ?
-                        filtring.map((e) => {
-                            return (
-                                <tr className='show'>
-                                    <td></td>
-                                    <td>{e.numero}</td>
-                                    <td></td>
-                                    <td className='ellipsis'><p>{e.objectif}</p></td>
-                                    <td></td>
-                                    <td>{e.expediteur}</td>
-                                    <td></td>
-                                    <td>{e.destinataire}</td>
-                                    <td></td>
-                                    <td>{e.employere}</td>
-                                    <td></td>
-                                    <td className='ellipsis'><p>{e.interet}</p></td>
-                                    <td></td>
-                                    <td>{e.date_de_fichier}</td>
-                                    <td></td>
-                                    <td><AiFillPrinter className='edit-icon' onClick={() => navigEprt(e.numero)} /></td>
-                                </tr>
-                            )
-                        })
-                        :
-                        records.map((e) => {
-                            return (
-                                <tr className='show'>
-                                    <td></td>
-                                    <td>{e.numero}</td>
-                                    <td></td>
-                                    <td className='ellipsis'><p>{e.objectif}</p></td>
-                                    <td></td>
-                                    <td>{e.expediteur}</td>
-                                    <td></td>
-                                    <td>{e.destinataire}</td>
-                                    <td></td>
-                                    <td>{e.employere}</td>
-                                    <td></td>
-                                    <td className='ellipsis'><p>{e.interet}</p></td>
-                                    <td></td>
-                                    <td>{e.date_de_fichier}</td>
-                                    <td></td>
-                                    <td><AiFillPrinter className='edit-icon' onClick={() => navigEprt(e.numero)} /></td>
-                                </tr>
-                            )
-                        })
+                    hundler?
+                    filtring.map((e) => {
+                        return (
+                            <tr>
+                                <td></td>
+                                <td>{e.numero}</td>
+                                <td></td>
+                                <td className='ellipsis'><p>{e.objectif}</p></td>
+                                <td></td>
+                                <td>{e.expediteur}</td>
+                                <td></td>
+                                <td>{e.destinataire}</td>
+                                <td></td>
+                                <td>{e.employere}</td>
+                                <td></td>
+                                <td>{e.interet}</td>
+                                <td></td>
+                                <td>{e.date_de_fichier}</td>
+                                <td></td>
+                                <td><AiFillPrinter className='edit-icon' onClick={() => navigEprt(e.numero)} /></td>
+                            </tr>
+                        )
+                    })
+                    :
+                    records.map((e) => {
+                        return (
+                            <tr>
+                                <td></td>
+                                <td>{e.numero}</td>
+                                <td></td>
+                                <td className='ellipsis'><p>{e.objectif}</p></td>
+                                <td></td>
+                                <td>{e.expediteur}</td>
+                                <td></td>
+                                <td>{e.destinataire}</td>
+                                <td></td>
+                                <td>{e.employere}</td>
+                                <td></td>
+                                <td>{e.interet}</td>
+                                <td></td>
+                                <td>{e.date_de_fichier}</td>
+                                <td></td>
+                                <td><AiFillPrinter className='edit-icon' onClick={() => navigEprt(e.numero)} /></td>
+                            </tr>
+                        )
+                    })
                 }
             </table>
         </div>
     )
 }
 
-export default TechniqueArr
+export default ArriverCompEmp

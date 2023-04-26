@@ -19,14 +19,17 @@ const TechniqueDelete = ({id}) => {
             "Accept": "application/json",
             "Authorization": 'Bearer ' + accesToken
         }
-      }).then(({data}) =>{
-        alert(data.message);
-        window.location.reload(false);
-      })  
+      })
+      }
+      const alertMessage = ()=>{
+        const comfirmer = "baghi tmsah ?"
+        if ( window.confirm(comfirmer) === true) {
+          return deleteAdmin();
+        }
       }
       return (
         <div>
-            <RiDeleteBin7Fill className='edit-icon' onClick={()=> deleteAdmin()}>Delete</RiDeleteBin7Fill>
+            <RiDeleteBin7Fill className='edit-icon' onClick={()=> alertMessage()}>Delete</RiDeleteBin7Fill>
         </div>
       )
 }

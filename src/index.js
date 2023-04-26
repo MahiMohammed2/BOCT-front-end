@@ -13,10 +13,10 @@ import AdministrativeComp from './components/superadmin/admin/AdministrativeComp
 import FinencierComp from './components/superadmin/admin/FinencierComp';
 import TechniqueComp from './components/superadmin/admin/TechniqueComp';
 import DepartComp from './components/superadmin/courier/DepartComp';
-import DepartComp_emp from './components/employe/courier/DepartComp_emp';
+import DepartCompEmp from './components/employe/courier/DepartCompEmp';
 import ArriverComp from './components/superadmin/courier/ArriverComp';
-import ArriverComp_emp from './components/employe/courier/ArriverComp_emp';
-import EmployesComp from './components/superadmin/EmployesComp';
+import ArriverCompEmp from './components/employe/courier/ArriverCompEmp';
+import EmployesComp from './components/superadmin/employe/EmployesComp';
 import AddAdmin from './components/superadmin/add/admin/AddAdmin';
 import AddEmploye from './components/superadmin/add/employe/AddEmploye';
 import AdministrativeEdit from './components/superadmin/edit/admin/AdministrativeEdit';
@@ -47,7 +47,7 @@ import FinenDirector from './components/director/Admins/FinenDirector';
 import TechDirector from './components/director/Admins/TechDirector';
 import SupDirector from './components/director/SuperAdmin/SupDirector';
 import AddSupDirector from './components/director/SuperAdmin/AddSupDirector';
-import EmpDirector from './components/director/employe/EmpPresident';
+import EmpDirector from './components/director/employe/EmpDirector';
 import PresidentLogin from './page/President/Auth/PresidentLogin';
 import DirectorLogin from './page/Diretor/Auth/DirectorLogin';
 import DirectorIndex from './page/Diretor/DirectorIndex';
@@ -69,13 +69,18 @@ import TechniqueLayout from './page/Admin/Technique/TechniqueLayout';
 import TechniqueEmp from './components/admin/technique/TechniqueEmp';
 import TechniqueArr from './components/admin/technique/TechniqueArr';
 import TechniqueDep from './components/admin/technique/TechniqueDep';
-import ExportArriver from './components/export/ExportArriver';
-import ExportDepart from './components/export/ExportDepart';
 import ArrExport from './components/export/ArrExport';
-
+import DepExport from './components/export/DepExport';
+import App from './page/App';
 
 const router = createBrowserRouter(
   [
+    {
+      path: '/',
+      element: <App />,
+      errorElement: <ErrPage />,
+    }
+    ,
     {
       path: '/',
       element: <Layout />,
@@ -104,7 +109,7 @@ const router = createBrowserRouter(
         {
           element: <DirectorLayout />, path: '/director',
           children: [
-            { element: <DirectorIndex />, path: '/director/' },
+            { element: <DirectorIndex />, path: '/director' },
             { element: <SupDirector />, path: '/director/superadmin' },
             { element: <AddSupDirector />, path: '/director/addSuperadmin' },
             { element: <AdminiDirector />, path: '/director/administrative' },
@@ -113,9 +118,7 @@ const router = createBrowserRouter(
             { element: <EmpDirector />, path: '/director/employe' },
           ]
         },
-
         // --------------------- Super Admin Routes --------------------------//
-
         {
           element: <SupLayout />, path: '/superadmin',
           children: [
@@ -138,32 +141,32 @@ const router = createBrowserRouter(
         },
         // --------------------- Admine Administrative Routes --------------------------//
         {
-          element: <AdministrativeLayout/>, path: '/administrative',
+          element: <AdministrativeLayout />, path: '/administrative',
           children: [
-            {element: <AdministrativeIndex/>, path: '/administrative/'},
-            {element: <AdministrativeEmp/>, path: '/administrative/employes'},
-            {element: <AdministrativeArr/>, path: '/administrative/arriver'},
-            {element: <AdministrativeDep/>, path: '/administrative/depart'},
+            { element: <AdministrativeIndex />, path: '/administrative/' },
+            { element: <AdministrativeEmp />, path: '/administrative/employes' },
+            { element: <AdministrativeArr />, path: '/administrative/arriver' },
+            { element: <AdministrativeDep />, path: '/administrative/depart' },
           ]
         },
         // --------------------- Admine Finenciere Routes --------------------------//
         {
-          element: <FinenciereLayout/>, path: '/finenciere',
+          element: <FinenciereLayout />, path: '/finenciere',
           children: [
-            {element: <FinenciereIndex/>, path: '/finenciere/'},
-            {element: <FinenciereEmp/>, path: '/finenciere/employes'},
-            {element: <FinenciereArr/>, path: '/finenciere/arriver'},
-            {element: <FinenciereDep/>, path: '/finenciere/depart'},
+            { element: <FinenciereIndex />, path: '/finenciere/' },
+            { element: <FinenciereEmp />, path: '/finenciere/employes' },
+            { element: <FinenciereArr />, path: '/finenciere/arriver' },
+            { element: <FinenciereDep />, path: '/finenciere/depart' },
           ]
         },
         // --------------------- Admine Finenciere Routes --------------------------//
         {
-          element: <TechniqueLayout/>, path: '/technique',
+          element: <TechniqueLayout />, path: '/technique',
           children: [
-            {element: <TechniqueIndex/>, path: '/technique/'},
-            {element: <TechniqueEmp/>, path: '/technique/employes'},
-            {element: <TechniqueArr/>, path: '/technique/arriver'},
-            {element: <TechniqueDep/>, path: '/technique/depart'},
+            { element: <TechniqueIndex />, path: '/technique/' },
+            { element: <TechniqueEmp />, path: '/technique/employes' },
+            { element: <TechniqueArr />, path: '/technique/arriver' },
+            { element: <TechniqueDep />, path: '/technique/depart' },
           ]
         },
         // --------------------- Employe Routes --------------------------//
@@ -171,16 +174,17 @@ const router = createBrowserRouter(
           element: <EmployeLayout />, path: '/employe',
           children: [
             { element: <EmployeIndex />, path: '/employe' },
-            { element: <ArriverComp_emp />, path: '/employe/arriver' },
-            { element: <DepartComp_emp />, path: '/employe/depart' },
+            { element: <ArriverCompEmp />, path: '/employe/arriver' },
+            { element: <DepartCompEmp />, path: '/employe/depart' },
             { element: <AddArriver />, path: '/employe/addArriver' },
             { element: <AddDepart />, path: '/employe/addDepart' },
           ]
         },
-
-
+        // --------------------- Export Routes --------------------------//
+        { element: <ArrExport />, path: '/export/arriver/:id' },
+        { element: <DepExport />, path: '/export/depart/:id' },
+        // --------------------- Seach Routes --------------------------//
         // --------------------- login Routes --------------------------//
-
         { element: <PresidentLogin />, path: "/president/login", index: true },
         { element: <DirectorLogin />, path: "/director/login", index: true },
         { element: <SupAdminLogin />, path: "/superadmin/login", index: true },
@@ -188,8 +192,6 @@ const router = createBrowserRouter(
         { element: <AdminiLogin />, path: "/administrative/login", index: true },
         { element: <FinenLogin />, path: "/finenciere/login", index: true },
         { element: <TechLogin />, path: "/technique/login", index: true },
-        {element: <ArrExport numero={2}/>,path:"/fff"},
-        {element: <ExportDepart/>, path: "/export/depart"},
       ]
     }
 
@@ -200,7 +202,4 @@ root.render(
   <RouterProvider router={router} />
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

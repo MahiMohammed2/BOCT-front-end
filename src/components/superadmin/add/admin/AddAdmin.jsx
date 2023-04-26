@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import Translate from '../../../../static/DataLanguage.json';
 
 const AddAdmin = () => {
     const [fullname, setFullName] = useState("");
@@ -9,11 +10,10 @@ const AddAdmin = () => {
     const [password, setPassword] = useState("");
     const [type,setType] = useState("Administrative");
     const navigate = useNavigate();
+    const [contente, setContente] = useState("");
     const addAdmin = async (e) => {
-
         e.preventDefault();
         const formData = new FormData();
-
         formData.append('fullname', fullname);
         formData.append('CIN', CIN);
         formData.append('email', email);
@@ -64,48 +64,55 @@ const AddAdmin = () => {
             console.log('error condition');
         }
     }
+    useEffect(() => {
+        const lang = localStorage.getItem('lang');
+        if (lang === "ar") {
+            setContente(Translate.العربية)
 
+        } else {
+            setContente(Translate.Français)
+        }
+    })
     return (
         <div className=''>
             <form onSubmit={addAdmin}>
                 <br />
                 <div className="form form-container">
-                    <h1>Ajouter un admin</h1>
-                    <div className='message-controle'>
-                    </div>
-                    <div className='form-controle childe-1'>
-                        <input type='text' name='fullname' value={fullname} onChange={(e) => { setFullName(e.target.value) }} placeholder='Entrer le nom complete' />
-                        <span className='info-text'>Entrer le nom complete d'admin *</span>
+                    <div className='form-controle'>
+                        <input type='text' name='fullname' value={fullname} onChange={(e) => { setFullName(e.target.value) }} placeholder={contente.entrer_nom_complete} />
+                        <span className='info-text'>{contente.entrer_nom_complete_admin} *</span>
                     </div>
                     
-                    <div className="form-controle childe-2">
-                        <input type='text' name='CIN' value={CIN} onChange={(e) => { setCIN(e.target.value) }} placeholder='Entrer le CIN' />
-                        <span className='info-text'>Entrer le CIN d'admin {'(minimume de charactere est 6)'} *</span>
+                    <div className="form-controle ">
+                        <input type='text' name='CIN' value={CIN} onChange={(e) => { setCIN(e.target.value) }} placeholder={contente.entrer_CIN} />
+                        <span className='info-text'>{contente.entrer_CIN_admin} *</span>
                     </div>
 
-                    <div className="form-controle childe-3">
-                        <input type='email' name='email' value={email} onChange={(e) => { setEmail(e.target.value) }} placeholder="Entrer l'address email"/>
-                        <span className='info-text'>Entrer l'address mail d'admin *</span>
+                    <div className="form-controle ">
+                        <input type='email' name='email' value={email} onChange={(e) => { setEmail(e.target.value) }} placeholder={contente.entrer_email}/>
+                        <span className='info-text'>{contente.entrer_email_admin} *</span>
                     </div>
                     
-                    <div className="form-controle childe-4">
-                        <input type='password' name='password' value={password} onChange={(e) => { setPassword(e.target.value) }} placeholder='Entrer le mot de pass' />
-                        <span className='info-text'>Entre le password d'admin {'(minimume de charactere est 8)'}*</span>
-                    </div>
-                    <div className="form-controle childe-6">
-                        <select className='selector' value={type} onChange={(e)=>{setType(e.target.value)}}>
-                            <option value="Administrative">Administrative</option>
-                            <option value="Financiere">Financiere</option>
-                            <option value="Technique">Technique</option>
-                        </select>
-                        <span className='info-text'>Entre le classe d'admin *</span>
+                    <div className="form-controle ">
+                        <input type='password' name='password' value={password} onChange={(e) => { setPassword(e.target.value) }} placeholder={contente.entrer_password} />
+                        <span className='info-text'>{contente.entrer_password_admin} *</span>
                     </div>
                     <div className="form-controle">
-                        <div className='btn-controle'>
-                            <button className='btn btn-primary'>Ajouter cette admin </button>
+                        <select className='selector' value={type} onChange={(e)=>{setType(e.target.value)}}>
+                            <option value="Administrative">{contente.administrative}</option>
+                            <option value="Financiere">{contente.financiere}</option>
+                            <option value="Technique">{contente.technique}</option>
+                        </select>
+                        <span className='info-text'>{contente.entrer_type_class_admin} *</span>
+                    </div>
+                    <div className="form-controle">
+                    <span>{contente.required_message}</span>
+                    </div>
+                    <div className="form-controle">
+                    <div className='btn-controle'>
+                            <button className='btn btn-primary'>{contente.ajouter_cet_admin}</button>
                         </div>
                     </div>
-                    <span>{'(*)'} : requis d'entre les informations ici</span>
                 </div>
 
             </form>

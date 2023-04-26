@@ -1,12 +1,16 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import {  useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Upload from '../../components/Itemes/Upload';
+import { Menubar } from 'primereact/menubar';
+import Translate from '../../static/DataLanguage.json';
+
 const DirectorIndex = () => {
     const [fullname, setFullName] = useState("");
     const [email, setEmail] = useState("");
-    const [username,setUsername] = useState("");
+    const [username, setUsername] = useState("");
     const navigate = useNavigate();
+    const [contente, setContente] = useState("");
 
     useEffect(() => {
         const accesToken = localStorage.getItem("accessToken_dir");
@@ -26,49 +30,87 @@ const DirectorIndex = () => {
             setEmail(res.data.datas.email)
             setUsername(res.data.datas.username)
         }
-        
+
         affiche();
     }, []);
+    useEffect(() => {
+        const lang = localStorage.getItem('lang');
+        if (lang === "ar") {
+            setContente(Translate.العربية)
+
+        } else {
+            setContente(Translate.Français)
+        }
+    })
+    const items = [
+        {
+            label: contente.language,
+            icon: 'pi pi-language',
+            items: [
+                {
+                    label: 'Français',
+                    command: () => {
+                        localStorage.setItem('lang', 'fr')
+                        window.location.reload(true)
+                    }
+                },
+                {
+                    label: 'العربية',
+                    command: () => {
+                        localStorage.setItem('lang', 'ar')
+                        window.location.reload(true)
+                    }
+
+                },
+            ]
+        }
+    ];
+
     return (
         <div className='profile-container'>
-    
+
             <div className="profile-controle">
                 <div className="profile-header">
                     <div className="profile-img-controle">
-                    <div className='img-container'>
-                        <Upload person={"director"}/>
-                    </div>
-                        <p className='profile-info-img'>Personnalisez votre compte avec une photo.</p>
+                        <div className='img-container'>
+                            <Upload person={"director"} />
+                        </div>
+                        <p className='profile-info-img'>{contente.partone}
+                            <p className='profile-info-text'>{contente.parttwo}</p>
+                        </p>
+                        <Menubar style={{ padding: "0", margin: "0" }} model={items} />
+
                     </div>
                 </div>
                 <div className='profile-column'>
                     <div className='profile-data'>
-                        <p className='profile-info'>Votre nom complete</p>
+                        <p className='profile-info'>{contente.nom_complete}</p>
                         <p >{fullname}</p>
                     </div>
                 </div>
             </div>
             <div className='profile-controle'>
                 <div className='profile-header'>
-                <div className="profile-data">
-                    <p>Profile info</p>
-                </div>
+                    <div className="profile-data">
+                        <p>{contente.profile_info}</p>
+                    </div>
                 </div>
                 <div className='profile-column'>
                     <div className='profile-data'>
-                        <p className='profile-info'>Votre username</p>
+                        <p className='profile-info'>{contente.username}</p>
                         <p >{username}</p>
                     </div>
                 </div>
                 <div className='profile-column'>
                     <div className='profile-data'>
-                        <p className='profile-info'>Votre email</p>
+                        <p className='profile-info'>{contente.email}</p>
                         <p >{email}</p>
                     </div>
                 </div>
 
 
             </div>
+
         </div>
     )
 }

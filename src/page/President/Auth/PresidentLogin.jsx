@@ -6,6 +6,7 @@ const PresidentLogin = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate('')
+    const [errorPassing, setErrorPassing] = useState(false);
 
     const loginSubmit = async (e) => {
         e.preventDefault();
@@ -13,7 +14,7 @@ const PresidentLogin = () => {
             username: username,
             password: password,
         }
-        const auth = await axios({
+        await axios({
             method: "post",
             data: {
                 username: data.username,
@@ -22,12 +23,19 @@ const PresidentLogin = () => {
             url: "http://localhost:8000/api/president/login",
             headers: {
                 "Accept": "application/json",
-                
+
+            }
+        }).then((res)=>{
+            localStorage.setItem("accessToken_pre", res.data.token)
+            localStorage.setItem("lang","fr")
+            navigate('/president/')
+        }).catch((err) => {
+            if (err.response?.status === 422) {
+                setErrorPassing(true)
+            } else if (err.response?.status === 401) {
+                setErrorPassing(true)
             }
         })
-        const res = await auth.data
-        localStorage.setItem("accessToken_pre", res.token)
-        navigate('/president/');
     }
     useEffect(() => {
         const login = async () => {
@@ -42,22 +50,27 @@ const PresidentLogin = () => {
     }, [])
     return (
         <div className='container-login'>
-<div className='container-form'>
-            <form onSubmit={loginSubmit} className='form'>
-                <h1>Login</h1>
-                <input className='input' type='text' name='username' onChange={(e) => setUsername(e.target.value)} value={username} placeholder='Entrer le username' />
-
-                <input className='input' type='password' name='password' onChange={(e) => setPassword(e.target.value)} value={password} placeholder='Entre le mot de pass' />
-                <div className='controle'>
-                    <button type="submit" className='btn dark-btn'>Se connecter</button>
+            <div className='container-form'>
+                <form onSubmit={loginSubmit} className='form'>
+                {errorPassing ?
+                        <div className='error_message'>Missing Username or Password</div>
+                        :
+                        ""}
+                    <h1>Login</h1>
+                    <input className='input' type='text' name='username'  onChange={(e) => setUsername(e.target.value)} value={username} placeholder='Entrer le username' />
+                    
+                    <input className='input' type='password' name='password' onChange={(e) => setPassword(e.target.value)} value={password} placeholder='Entre le mot de pass' />
+                    
+                    <div className='controle'>
+                        <button type="submit" className='btn dark-btn'>Se connecter</button>
+                    </div>
+                </form>
+                <div className='contexte-login'>
+                    <img className='logo-royal-maroc-login' src='../royal-maroc.png' />
+                    <h2>Concurrence Taourirt</h2>
+                    <span>Login page de directeure de bureau d'order</span>
                 </div>
-            </form>
-            <div className='contexte-login'>
-            <img className='logo-royal-maroc-login' src='../royal-maroc.png' />
-                <h2>Concurrence Taourirt</h2>
-                <span>Login page de directeure de bureau d'order</span>
             </div>
-</div>
         </div>
     )
 }

@@ -9,8 +9,13 @@ const style = {
   position: 'absolute',
   top: '50%',
   left: '50%',
+  display: 'flex',
+  flexWrap: 'wrap',
+  flexDirection: 'row',
+  alightItems: 'center',
+  justifyContent: 'center',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: 500,
   bgcolor: 'background.paper',
   border: 'none',
   outline: 'none',
@@ -25,23 +30,29 @@ const Upload = ({ person }) => {
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
   const navigate = useNavigate();
-//############################### Function useEffect for show picture profile of user ################################//
+
+  //############################### Function useEffect for show picture profile of user ################################//
+
   useEffect(() => {
     if (person === "employe") {
-      const accesToken = localStorage.getItem("accessToken_emp");
-      if (accesToken === undefined || accesToken === null || accesToken === 0) {
-        navigate('/employe/login')
-      }
       const affiche = async () => {
-        const res = await axios({
+        const accesToken = localStorage.getItem("accessToken_emp");
+        if (accesToken === "undefined" || accesToken === null || accesToken === 0) {
+          navigate('/employe/login')
+        }
+        await axios({
           method: "get",
           url: "http://localhost:8000/api/employe/",
           headers: {
             "Accept": "application/json",
             "Authorization": 'Bearer ' + accesToken
           }
+        }).then((res) => {
+          setImageUrl(res.data.datas.image_url)
+
+        }).catch((err) => {
+          console.log(err);
         })
-        setImageUrl(res.data.datas.image_url)
       }
       affiche();
     }
@@ -50,21 +61,25 @@ const Upload = ({ person }) => {
 
     else if (person === 'superadmin') {
 
-      const accesToken = localStorage.getItem("accessToken");
-      if (accesToken === undefined || accesToken === null || accesToken === 0) {
-        navigate('/superadmin/login')
-      }
       const affiche = async () => {
-        const res = await axios({
+        const accesToken = localStorage.getItem("accessToken");
+        
+        if (accesToken === undefined || accesToken === null || accesToken === 0) {
+          navigate('/superadmin/login')
+        }
+        await axios({
           method: "get",
           url: "http://localhost:8000/api/superadmin/",
           headers: {
             "Accept": "application/json",
             "Authorization": 'Bearer ' + accesToken
           }
+        }).then((res) => {
+          setImageUrl(res.data.datas.image_url)
+
+        }).catch((err) => {
+          console.log(err);
         })
-        setImageUrl(res.data.datas.image_url)
-        console.log(res.data.datas);
       }
       affiche();
     }
@@ -73,21 +88,24 @@ const Upload = ({ person }) => {
 
     else if (person === 'president') {
 
-      const accesToken = localStorage.getItem("accessToken_pre");
-      if (accesToken === undefined || accesToken === null || accesToken === 0) {
-        navigate('/president/login')
-      }
       const affiche = async () => {
-        const res = await axios({
+        const accesToken = localStorage.getItem("accessToken_pre");
+        if (accesToken === undefined || accesToken === null || accesToken === 0) {
+          navigate('/president/login')
+        }
+        await axios({
           method: "get",
           url: "http://localhost:8000/api/president/",
           headers: {
             "Accept": "application/json",
             "Authorization": 'Bearer ' + accesToken
           }
+        }).then((res) => {
+          setImageUrl(res.data.datas.image_url)
+
+        }).catch((err) => {
+          console.log(err);
         })
-        setImageUrl(res.data.datas.image_url)
-        console.log(res.data.datas);
       }
       affiche();
     }
@@ -96,67 +114,76 @@ const Upload = ({ person }) => {
 
     else if (person === 'director') {
 
-      const accesToken = localStorage.getItem("accessToken_dir");
-      if (accesToken === "undefined" || accesToken === null || accesToken === 0) {
-        navigate('/director/login')
-      }
       const affiche = async () => {
-        const res = await axios({
+        const accesToken = localStorage.getItem("accessToken_dir");
+        if (accesToken === "undefined" || accesToken === null || accesToken === 0) {
+          navigate('/director/login')
+        }
+        await axios({
           method: "get",
           url: "http://localhost:8000/api/director/",
           headers: {
             "Accept": "application/json",
             "Authorization": 'Bearer ' + accesToken
           }
+        }).then((res) => {
+          setImageUrl(res.data.datas.image_url)
+
+        }).catch((err) => {
+          console.log(err);
         })
-        setImageUrl(res.data.datas.image_url)
-        console.log(res.data.datas);
       }
       affiche();
     }
-    
+
     // ===============================================================
 
     else if (person === 'administrative') {
 
-      const accesToken = localStorage.getItem("accessToken_administrative");
-      if (accesToken === "undefined" || accesToken === null || accesToken === 0) {
-        navigate('/administrative/login')
-      }
       const affiche = async () => {
-        const res = await axios({
+        const accesToken = localStorage.getItem("accessToken_administrative");
+        if (accesToken === "undefined" || accesToken === null || accesToken === 0) {
+          navigate('/administrative/login')
+        }
+        await axios({
           method: "get",
           url: "http://localhost:8000/api/admin/administrative/",
           headers: {
             "Accept": "application/json",
             "Authorization": 'Bearer ' + accesToken
           }
+        }).then((res) => {
+          setImageUrl(res.data.datas.image_url)
+
+        }).catch((err) => {
+          console.log(err);
         })
-        setImageUrl(res.data.datas.image_url)
-        console.log(res.data.datas);
       }
       affiche();
     }
-        
+
     // ===============================================================
 
     else if (person === 'finenciere') {
 
-      const accesToken = localStorage.getItem("accessToken_finenciere");
-      if (accesToken === "undefined" || accesToken === null || accesToken === 0) {
-        navigate('/finenciere/login')
-      }
       const affiche = async () => {
-        const res = await axios({
+        const accesToken = localStorage.getItem("accessToken_finenciere");
+        if (accesToken === "undefined" || accesToken === null || accesToken === 0) {
+          navigate('/finenciere/login')
+        }
+        await axios({
           method: "get",
           url: "http://localhost:8000/api/admin/finenciere/",
           headers: {
             "Accept": "application/json",
             "Authorization": 'Bearer ' + accesToken
           }
+        }).then((res) => {
+          setImageUrl(res.data.datas.image_url)
+
+        }).catch((err) => {
+          console.log(err);
         })
-        setImageUrl(res.data.datas.image_url)
-        console.log(res.data.datas);
       }
       affiche();
     }
@@ -165,33 +192,36 @@ const Upload = ({ person }) => {
 
     else if (person === 'technique') {
 
-      const accesToken = localStorage.getItem("accessToken_technique");
-      if (accesToken === "undefined" || accesToken === null || accesToken === 0) {
-        navigate('/technique/login')
-      }
       const affiche = async () => {
-        const res = await axios({
+        const accesToken = localStorage.getItem("accessToken_technique");
+        if (accesToken === "undefined" || accesToken === null || accesToken === 0) {
+          navigate('/technique/login')
+        }
+        await axios({
           method: "get",
           url: "http://localhost:8000/api/admin/technique/",
           headers: {
             "Accept": "application/json",
             "Authorization": 'Bearer ' + accesToken
           }
+        }).then((res) => {
+          setImageUrl(res.data.datas.image_url)
+
+        }).catch((err) => {
+          console.log(err);
         })
-        setImageUrl(res.data.datas.image_url)
-        console.log(res.data.datas);
       }
       affiche();
     }
-  }, []);
-//###################################################################################################################//
+  });
+  //###################################################################################################################//
 
 
 
-//####################################### Function for add picture profile ##########################################//
+  //####################################### Function for add picture profile ##########################################//
 
   const addProfileImage = async (e) => {
-  
+
     if (person === 'superadmin') {
       e.preventDefault();
 
@@ -211,7 +241,7 @@ const Upload = ({ person }) => {
         }
       }).then(({ data }) => {
         console.log(data.message);
-        window.location.reload(false);
+        setOpen(false)
       })
     }
 
@@ -236,10 +266,10 @@ const Upload = ({ person }) => {
         }
       }).then(({ data }) => {
         console.log(data.message);
-        window.location.reload(false);
+        setOpen(false)
       })
     }
-    
+
     // ===============================================================
 
     else if (person === 'president') {
@@ -261,10 +291,10 @@ const Upload = ({ person }) => {
         }
       }).then(({ data }) => {
         console.log(data.message);
-        window.location.reload(false);
+        setOpen(false)
       })
     }
-    
+
     // ===============================================================
 
     else if (person === 'director') {
@@ -286,10 +316,10 @@ const Upload = ({ person }) => {
         }
       }).then(({ data }) => {
         console.log(data.message);
-        window.location.reload(false);
+        setOpen(false)
       })
     }
-    
+
     // ===============================================================
 
     else if (person === 'administrative') {
@@ -311,7 +341,7 @@ const Upload = ({ person }) => {
         }
       }).then(({ data }) => {
         console.log(data.message);
-        window.location.reload(false);
+        setOpen(false)
       })
     }
 
@@ -336,10 +366,10 @@ const Upload = ({ person }) => {
         }
       }).then(({ data }) => {
         console.log(data.message);
-        window.location.reload(false);
+        setOpen(false)
       })
     }
-        
+
     // ===============================================================
 
     else if (person === 'technique') {
@@ -361,19 +391,18 @@ const Upload = ({ person }) => {
         }
       }).then(({ data }) => {
         console.log(data.message);
-        window.location.reload(false);
+        setOpen(false)
       })
     }
     else {
       console.log('error');
     }
   }
-//###################################################################################################################//
-  
+  //###################################################################################################################//
+
   const handlechange = (e) => {
     setImage(e.target.files[0])
   }
-
   return (
     <div>
       <Avatar className='img' image={imageUrl} icon="pi pi-user" style={{ width: '180px', height: '180px', background: "#919191", color: "#fafafa" }} shape="circle" onClick={handleOpen} />
@@ -383,7 +412,7 @@ const Upload = ({ person }) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box sx={style} >
           <form onSubmit={addProfileImage}>
             <input type="file" name="image_profile" onChange={handlechange} className='profile-add-img' />
             <button type='submit' className='btn-add-image'>Confirmer</button>
