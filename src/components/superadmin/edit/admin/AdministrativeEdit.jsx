@@ -38,11 +38,8 @@ const AdministrativeEdit = () => {
           "Accept": "application/json",
           "Authorization": 'Bearer ' + accesToken
       }
-    }).then(({ data }) => {
-      console.log(data.message);
-      setMessage(data.message)
-      setBoolean(true)
     })
+    navigate('/superadmin/administrative')
   }
   useEffect(() => {
     const lang = localStorage.getItem('lang');
@@ -79,7 +76,7 @@ const AdministrativeEdit = () => {
           </div>
           <div className="form-controle">
             <div className='btn-controle'>
-              <button className='btn btn-primary'>{contente.ajouter_admin}</button>
+              <button className='btn btn-primary'>{contente.modifier}</button>
             </div>
           </div>
           <span>{contente.required_message}</span>

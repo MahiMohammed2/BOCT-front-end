@@ -88,11 +88,16 @@
         "entrer_username_admin":"Entrer le nom d'utilisateur d'admin",
         "entrer_username":"Entrer le nom d'utilisateur",
         "director":"Directeur d'interet",
-        "delete_info":"Voulez-vous vraiment supprimer cet employé ?",
+        "delete_info":"Voulez-vous vraiment supprimer l'employé ?",
+        "delete_info_admin":"Voulez-vous vraiment supprimer l'admin?",
         "error_return":"Aller à la page d'accueil",
         "page_not_found":"Cette page n'existe pas",
         "error":"Erreur",
-        "searching":"recherche...."
+        "searching":"recherche....",
+        "edit_administrative":"Modifier l'admin administrative numero ",
+        "edit_admin":"Modifier l'admin",
+        "edit_employe":"Modifier l'employé",
+        "modifier":"Modifier"
 
     },
     "العربية": {
@@ -185,10 +190,13 @@
         "entrer_username":"أدخل إسم المستخدم",
         "director":"مدير المصالح",
         "delete_info":"هل أنت متأكد أنك تريد حذف هذا الموظف؟",
+        "delete_info_admin":"هل أنت متأكد أنك تريد حذف المسؤول؟",
         "error_return":"العودة إلى الصفحة الرئيسة",
         "page_not_found":"هذه الصفحة غير موجودة",
         "error":"خطأ",
         "searching":"....البحث",
-        "edit_administrative":"تعديل على المسؤول الإداري رقم"
+        "edit_administrative":"تعديل على المسؤول الإداري رقم",
+        "edit_admin":"Modifier l'admin",
+        "modifier":"تعديل"
     }
 }

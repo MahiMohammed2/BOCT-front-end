@@ -21,6 +21,7 @@ const EmployeLogin = () => {
             },
             url: "http://localhost:8000/api/employe/login",
             headers: {
+                
                 "Accept": "application/json",
             }
         }).then((res) => {
@@ -52,7 +53,7 @@ const EmployeLogin = () => {
             <div className='container-form'>
                 <form onSubmit={loginSubmit} className='form'>
                     {errorPassing ?
-                        <div className='error_message'>Missing Username or Password</div>
+                        <div className='error_message'>Le password ou l'adresse email est pas correct</div>
                         :
                         ""}
                     <h1>Login</h1>

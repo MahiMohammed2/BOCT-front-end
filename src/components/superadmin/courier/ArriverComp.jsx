@@ -1,26 +1,79 @@
+import * as React from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import { AiFillPrinter } from 'react-icons/ai';
+import { DataGridPro } from '@mui/x-data-grid-pro';
+import '../../export/styleFile.css';
+import html2pdf from 'html2pdf.js/dist/html2pdf.min';
+import { Box, Button } from '@mui/material';
+import DownloadIcon from '@mui/icons-material/Download';
 import { useNavigate } from 'react-router-dom';
-import Translate from '../../../static/DataLanguage.json';
-import { MdNavigateNext, MdNavigateBefore } from 'react-icons/md';
-const ArriverComp = () => {
 
+const ArrExport = ({ row: rowProp }) => {
+    const exprt = () => {
+        var element = document.getElementById('file');
+        var opt = {
+            margin: 1,
+            filename: 'fichier(' + rowProp.id + ').pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+        html2pdf(element, opt);
+    }
+    return (
+        <div>
+            <div className='export'>
+                <Box
+                    sx={{
+                        maxWidth: '100%',
+                    }}
+                >
+                    <Button size='small' onClick={exprt}><DownloadIcon /></Button>
+                </Box>
+                <div className='file-container'>
+
+                    <div className='file' id='file'>
+                        <div className='exp_header'>
+                            <img className='exp_img' src="/royal-maroc.png" alt="img" />
+                            <p className='title'>Commun taourirt</p>
+                            <p>{rowProp.id}</p>
+                        </div>
+                        <div className='exp_title'>
+                            <span >{rowProp.interet}</span>
+                        </div>
+                        <div className='exp_objectife'>
+                            <div>
+                                <h5>Sujet</h5>
+                            </div>
+                            <span >{rowProp.objectif}</span>
+                        </div>
+                        <div className='exp_footer'>
+                            <span>Fichier d'arriver</span>
+                            <span>Date de fichier : {rowProp.date_de_fichier}</span>
+                        </div>
+                        <div className='exp_signiature'>
+                            <span>Signature de president</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default function ArriverComp() {
     const [Arriver, setArriver] = useState([]);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-    const [contente, setContente] = useState("");
-    const [curentPage, setCurentPage] = useState(1);
-    const recordsPages = 18;
-    const lastIndex = curentPage * recordsPages;
-    const firstIndex = lastIndex - recordsPages;
-    const [filtring, setFiltring] = useState([]);
-    const [hundler, setHundler] = useState(false);
     useEffect(() => {
         const affiche = async () => {
             const accesToken = localStorage.getItem("accessToken");
-            if (accesToken === "undefined" || accesToken === null || accesToken === 0 || accesToken === false) {
+            if (accesToken == "undefined" || accesToken === null || accesToken === 0) {
                 navigate('/superadmin/login')
-            }
+              }
             await axios({
                 method: "get",
                 url: "http://localhost:8000/api/superadmin/",
@@ -30,139 +83,39 @@ const ArriverComp = () => {
                 }
             }).then((res) => {
                 setArriver(res.data.Arriver)
+                setLoading(false)
             })
         }
         affiche();
     }, []);
-    const navigEprt = (e) => {
-        navigate('/export/arriver/' + e)
-    }
-    const records = Arriver.slice(firstIndex, lastIndex);
-    const nPages = Math.ceil(Arriver.length / recordsPages);
 
-    useEffect(() => {
-        const lang = localStorage.getItem('lang');
-        if (lang === "ar") {
-            setContente(Translate.العربية)
+    const columns = [
+        { field: 'id', headerName: 'Numero', type: 'number', width: 100 },
+        { field: 'objectif', headerName: 'Objectif', width: 400 },
+        { field: 'expediteur', headerName: 'Expediteur', width: 180 },
+        { field: 'destinataire', headerName: 'Destinataire', width: 180 },
+        { field: 'interet', headerName: 'Interet', width: 300 },
+        { field: 'type', headerName: 'Division', width: 210 },
+        { field: 'employere', headerName: 'employere', width: 210 },
+        { field: 'date_de_fichier', headerName: 'Date de fichier', width: 200 },
+    ];
+    const getDetailPanelContent = React.useCallback(
+        ({ row }) => <ArrExport row={row} />,
+        [],
+    );
+    const getDetailPanelHeight = React.useCallback(() => 600, []);
 
-        } else {
-            setContente(Translate.Français)
-        }
-    })
-
-    const prePage = async () => {
-        if (curentPage !== 1) {
-            setCurentPage(curentPage - 1)
-        }
-    }
-    const nextPage = async () => {
-        if (curentPage !== nPages) {
-            setCurentPage(curentPage + 1)
-        }
-    }
-
-    const Searching = (ev) => {
-        const query = ev.target.value
-        setFiltring(Arriver.filter(item =>
-            item.numero === parseInt(query)
-        ))
-        if (query.length > 0) {
-            setHundler(true)
-        } else if (query === "") {
-            setHundler(false)
-        }
-    }
     return (
-        <div>
-            <table className='table'>
-                <tr>
-                    <th colSpan={19}>
-                        <div className="header_controle">
-                            <ul className='list_pagination'>
-                                <li>
-                                    <MdNavigateBefore className='icon_pagination' onClick={prePage} />
-                                </li>
-                                <li>
-                                    <MdNavigateNext className='icon_pagination' onClick={nextPage} />
-                                </li>
-                            </ul>
-                            <input className='input_search' type="text" placeholder={contente.searching} onChange={Searching} />
-                        </div>
-                    </th>
-                </tr>
-                <tr>
-                    <th colSpan={19}>{contente.fichier_arriver}</th>
-                </tr>
-                <tr>
-                    <th className='space-header'></th>
-                    <th className='bordred-head' >{contente.numero}</th>
-                    <th className='space-header'></th>
-                    <th className='bordred-head'>{contente.objectif}</th>
-                    <th className='space-header'></th>
-                    <th className='bordred-head'>{contente.expediteur}</th>
-                    <th className='space-header'></th>
-                    <th className='bordred-head'>{contente.destinataire}</th>
-                    <th className='space-header'></th>
-                    <th className='bordred-head'>{contente.employe}</th>
-                    <th className='space-header'></th>
-                    <th className='bordred-head'>{contente.type_interet}</th>
-                    <th className='space-header'></th>
-                    <th className='bordred-head'>{contente.date_fichier}</th>
-                    <th className='space-header'></th>
-                    <th className='space-header'></th>
-                </tr>
-                {
-                    hundler ?
-                        filtring.map((e, index) => {
-                            return (
-                                <tr className='show' key={index}>
-                                    <td></td>
-                                    <td >{e.numero}</td>
-                                    <td></td>
-                                    <td className='ellipsis'><p>{e.objectif}</p></td>
-                                    <td></td>
-                                    <td title={e.expediteur} className='ellipsis-sm'><p>{e.expediteur}</p></td>
-                                    <td></td>
-                                    <td>{e.destinataire}</td>
-                                    <td></td>
-                                    <td>{e.employere}</td>
-                                    <td></td>
-                                    <td title={e.interet} className='ellipsis'><p>{e.interet}</p></td>
-                                    <td></td>
-                                    <td>{e.date_de_fichier}</td>
-                                    <td></td>
-                                    <td><AiFillPrinter className='edit-icon' onClick={() => navigEprt(e.numero)} /></td>
-                                </tr>
-                            )
-                        })
-                        :
-                        records.map((e, index) => {
-                            return (
-                                <tr className='show' key={index}>
-                                    <td></td>
-                                    <td >{e.numero}</td>
-                                    <td></td>
-                                    <td className='ellipsis'><p>{e.objectif}</p></td>
-                                    <td></td>
-                                    <td title={e.expediteur} className='ellipsis-sm'><p>{e.expediteur}</p></td>
-                                    <td></td>
-                                    <td>{e.destinataire}</td>
-                                    <td></td>
-                                    <td>{e.employere}</td>
-                                    <td></td>
-                                    <td title={e.interet} className='ellipsis'><p>{e.interet}</p></td>
-                                    <td></td>
-                                    <td>{e.date_de_fichier}</td>
-                                    <td></td>
-                                    <td><AiFillPrinter className='edit-icon' onClick={() => navigEprt(e.numero)} /></td>
-                                </tr>
-                            )
-                        })
-                }
-            </table>
+        <div className='table_container'>
+            <div style={{ maxHeight: 900, height: 900, width: '100%' }}>
+                <DataGridPro
+                    rows={Arriver} columns={columns} loading={loading}
+                    getDetailPanelHeight={getDetailPanelHeight}
+                    getDetailPanelContent={getDetailPanelContent}
+                />
+            </div>
+
 
         </div>
     )
 }
-
-export default ArriverComp

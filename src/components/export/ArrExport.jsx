@@ -4,19 +4,17 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import './styleFile.css';
 import Translate from '../../static/DataLanguage.json';
-const ArrExport = () => {
+const ArrExport = ({id}) => {
   const [language, setLanguage] = useState("Français");
   const [contente, setContente] = useState("");
   const [fontArabic,setFontArabic] = useState(false);
-  const { id } = useParams();
   const [arr, setArr] = useState([]);
   const navigate = useNavigate();
-  
   useEffect(() => {
     const affiche = async () => {
       await axios({
         method: "get",
-        url: "http://localhost:8000/api/courier/arriver/" + id,
+        url: "http://localhost:8000/api/courier/arriver/" + 2,
         headers: {
           "Accept": "application/json",
         }

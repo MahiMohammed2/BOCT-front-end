@@ -1,116 +1,97 @@
+import * as React from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import { DataGridPro } from '@mui/x-data-grid-pro';
+import { Card, CardContent, CardMedia, Paper, Typography } from '@mui/material';
+import '../../export/styleFile.css';
+import img from '../../../static/images/defaultImage.png';
 import { useNavigate } from 'react-router-dom';
-import Translate from '../../../static/DataLanguage.json';
-const AdminiDirector = () => {
-    const [admin, setAdmin] = useState([]);
-    const [contente, setContente] = useState("");
-    const [filtring, setFiltring] = useState([]);
-    const [hundler, setHundler] = useState(false);
-    const navigate = useNavigate()
-    useEffect(() => {
-        const accesToken = localStorage.getItem("accessToken_dir");
-        if (accesToken === undefined || accesToken === null || accesToken === 0) {
-            navigate('/director/login')
-        }
-        const affiche = async () => {
-            const res = await axios({
-                method: "get",
-                url: "http://localhost:8000/api/director/",
-                headers: {
-                    "Accept": "application/json",
-                    "Authorization": 'Bearer ' + accesToken
-                }
-            })
-            setAdmin(res.data.AdminAdministratives);
-        }
-        affiche();
-    }, []);
-    useEffect(() => {
-        const lang = localStorage.getItem('lang');
-        if (lang === "ar") {
-            setContente(Translate.العربية)
 
-        } else {
-            setContente(Translate.Français)
-        }
-    })
-    const Searching = (ev) => {
-        const query = ev.target.value
-        setFiltring(admin.filter(item =>
-            item.id === parseInt(query)
-        ))
-        if (query.length > 0) {
-            setHundler(true)
-        } else if (query === "") {
-            setHundler(false)
-        }
+const Admin = ({ row: rowProp }) => {
+  const [image, setImage] = useState('');
+  useEffect(() => {
+    if (rowProp.image_url === null) {
+      setImage(img)
+    } else {
+      setImage(rowProp.image_url)
     }
-    return (
-
-        <div>
-            <table className='table'>
-                <tr>
-                    <th colSpan={19}>
-                        <div className="header_controle_single">
-                            <input className='input_search' type="text" placeholder={contente.searching} onChange={Searching} />
-                        </div>
-                    </th>
-                </tr>
-                <tr className='header'>
-                    <th colSpan={20}>{contente.admins_de + " " + contente.administrative}</th>
-                </tr>
-                <tr>
-                    <th className='space-header'></th>
-                    <th className='space-header'></th>
-                    <th className='bordred-head'>{contente.id}</th>
-                    <th className='space-header'></th>
-                    <th className='bordred-head'>{contente.nom_complete}</th>
-                    <th className='space-header'></th>
-                    <th className='bordred-head'>{contente.email}</th>
-                    <th className='space-header'></th>
-                    <th className='bordred-head'>{contente.CIN}</th>
-                    <th className='space-header'></th>
-                </tr>
-                {
-                    hundler?
-                    filtring.map((e) => {
-                        return (
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td>{e.id}</td>
-                                <td></td>
-                                <td>{e.fullname}</td>
-                                <td></td>
-                                <td>{e.email}</td>
-                                <td></td>
-                                <td>{e.CIN}</td>
-                                <td></td>
-                            </tr>
-                        )
-                    })
-                    :
-                    admin.map((e) => {
-                        return (
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td>{e.id}</td>
-                                <td></td>
-                                <td>{e.fullname}</td>
-                                <td></td>
-                                <td>{e.email}</td>
-                                <td></td>
-                                <td>{e.CIN}</td>
-                                <td></td>
-                            </tr>
-                        )
-                    })
-                }
-            </table>
-        </div>
-    )
+  })
+  return (
+    <Paper sx={{ display: "flex", alignItems: "center", justifyContent: "center", mx: 'auto', width: '90%', p: 1 }}>
+      <Card sx={{ minWidth: 350, maxWidth: 400 }}>
+        <CardMedia
+          sx={{ height: 300 }}
+          image={image}
+          title={rowProp.fullname}
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div">
+            {rowProp.fullname}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            ID : {rowProp.id}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            CIN : {rowProp.CIN}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Adresse email : {rowProp.email}
+          </Typography>
+        </CardContent>
+      </Card>
+    </Paper>
+  )
 }
 
-export default AdminiDirector
+export default function AdminiDirector() {
+  const [admin, setAdmin] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  useEffect(() => {
+    const affiche = async () => {
+      const accesToken = localStorage.getItem("accessToken_dir");
+      if (accesToken == "undefined" || accesToken === null || accesToken === 0) {
+        navigate('/director/login')
+    }
+      await axios({
+        method: "get",
+        url: "http://localhost:8000/api/director/",
+        headers: {
+          "Accept": "application/json",
+          "Authorization": 'Bearer ' + accesToken
+        }
+      }).then((res) => {
+        setAdmin(res.data.AdminAdministratives)
+        setLoading(false)
+      }) 
+    }
+    affiche();
+  }, []);
+
+  const columns = [
+    { field: 'id', headerName: 'Numero', type: 'number', width: 100 },
+    { field: 'fullname', headerName: 'Nom et Prénom', width: 400 },
+    { field: 'CIN', headerName: 'CIN', width: 400 },
+    { field: 'email', headerName: 'Adresse email', width: 400 },
+  ];
+  const getDetailPanelContent = React.useCallback(
+    ({ row }) => <Admin row={row} />,
+    [],
+  );
+  const getDetailPanelHeight = React.useCallback(() => 500, []);
+  return (
+    <div className='table_container'>
+      <div style={{ maxHeight: 860,height:860, width: '100%' }}>
+
+        <DataGridPro
+          rows={admin} columns={columns} loading={loading}
+          getDetailPanelHeight={getDetailPanelHeight}
+          getDetailPanelContent={getDetailPanelContent}
+        />
+      </div>
+
+
+    </div>
+  )
+}

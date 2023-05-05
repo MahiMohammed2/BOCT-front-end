@@ -17,17 +17,9 @@ import DepartCompEmp from './components/employe/courier/DepartCompEmp';
 import ArriverComp from './components/superadmin/courier/ArriverComp';
 import ArriverCompEmp from './components/employe/courier/ArriverCompEmp';
 import EmployesComp from './components/superadmin/employe/EmployesComp';
-import AddAdmin from './components/superadmin/add/admin/AddAdmin';
-import AddEmploye from './components/superadmin/add/employe/AddEmploye';
-import AdministrativeEdit from './components/superadmin/edit/admin/AdministrativeEdit';
-import FinenciereEdit from './components/superadmin/edit/admin/FinencierEdit';
-import TechniqueEdit from './components/superadmin/edit/admin/TechniqueEdit';
-import EmployeEdit from './components/superadmin/edit/employe/EmployeEdit';
 import EmployeLayout from './page/Employe/EmployeLayout';
 import EmployeLogin from './page/Employe/Auth/EmployeLogin';
 import EmployeIndex from './page/Employe/EmployeIndex';
-import AddArriver from './components/employe/addFichier/AddArriver';
-import AddDepart from './components/employe/addFichier/AddDepart';
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
@@ -46,7 +38,6 @@ import AdminiDirector from './components/director/Admins/AdminiDirector';
 import FinenDirector from './components/director/Admins/FinenDirector';
 import TechDirector from './components/director/Admins/TechDirector';
 import SupDirector from './components/director/SuperAdmin/SupDirector';
-import AddSupDirector from './components/director/SuperAdmin/AddSupDirector';
 import EmpDirector from './components/director/employe/EmpDirector';
 import PresidentLogin from './page/President/Auth/PresidentLogin';
 import DirectorLogin from './page/Diretor/Auth/DirectorLogin';
@@ -69,20 +60,16 @@ import TechniqueLayout from './page/Admin/Technique/TechniqueLayout';
 import TechniqueEmp from './components/admin/technique/TechniqueEmp';
 import TechniqueArr from './components/admin/technique/TechniqueArr';
 import TechniqueDep from './components/admin/technique/TechniqueDep';
-import ArrExport from './components/export/ArrExport';
-import DepExport from './components/export/DepExport';
 import App from './page/App';
 
 const router = createBrowserRouter(
   [
     {
-      path: '/',
-      element: <App />,
-      errorElement: <ErrPage />,
-    }
-    ,
+      path:"/",
+      element:<App/>,
+      errorElement: <ErrPage />
+    },
     {
-      path: '/',
       element: <Layout />,
       errorElement: <ErrPage />,
       children: [
@@ -94,7 +81,7 @@ const router = createBrowserRouter(
             { element: <PresidentIndex />, path: '/president/' },
             { element: <DepPresident />, path: '/president/depart' },
             { element: <ArrPresident />, path: '/president/arriver' },
-            { element: <DirPresident />, path: '/president/directeur' },
+            { element: <DirPresident />, path: '/president/director' },
             { element: <SupPresident />, path: '/president/superadmin' },
             { element: <AdminiPresident />, path: '/president/administrative' },
             { element: <FienPresident />, path: '/president/finencier' },
@@ -111,7 +98,6 @@ const router = createBrowserRouter(
           children: [
             { element: <DirectorIndex />, path: '/director' },
             { element: <SupDirector />, path: '/director/superadmin' },
-            { element: <AddSupDirector />, path: '/director/addSuperadmin' },
             { element: <AdminiDirector />, path: '/director/administrative' },
             { element: <FinenDirector />, path: '/director/finencier' },
             { element: <TechDirector />, path: '/director/technique' },
@@ -124,19 +110,11 @@ const router = createBrowserRouter(
           children: [
             { element: <SupAdminIndex />, path: '/superadmin' },
             { element: <EmployesComp />, path: '/superadmin/employes' },
-            { element: <AdministrativeComp />, path: '/superadmin/administrative/' },
-            { element: <FinencierComp />, path: '/superadmin/financier/' },
-            { element: <TechniqueComp />, path: '/superadmin/technique/' },
+            { element: <AdministrativeComp />, path: '/superadmin/administrative' },
             { element: <FinencierComp />, path: '/superadmin/finencier' },
             { element: <TechniqueComp />, path: '/superadmin/technique' },
             { element: <ArriverComp />, path: '/superadmin/arriver' },
             { element: <DepartComp />, path: '/superadmin/depart' },
-            { element: <AddAdmin />, path: '/superadmin/addadmin' },
-            { element: <AddEmploye />, path: '/superadmin/addemploye' },
-            { element: <AdministrativeEdit />, path: '/superadmin/administrative/:id' },
-            { element: <FinenciereEdit />, path: '/superadmin/finenciere/:id' },
-            { element: <TechniqueEdit />, path: '/superadmin/technique/:id' },
-            { element: <EmployeEdit />, path: '/superadmin/employe/:id' },
           ]
         },
         // --------------------- Admine Administrative Routes --------------------------//
@@ -176,14 +154,8 @@ const router = createBrowserRouter(
             { element: <EmployeIndex />, path: '/employe' },
             { element: <ArriverCompEmp />, path: '/employe/arriver' },
             { element: <DepartCompEmp />, path: '/employe/depart' },
-            { element: <AddArriver />, path: '/employe/addArriver' },
-            { element: <AddDepart />, path: '/employe/addDepart' },
           ]
         },
-        // --------------------- Export Routes --------------------------//
-        { element: <ArrExport />, path: '/export/arriver/:id' },
-        { element: <DepExport />, path: '/export/depart/:id' },
-        // --------------------- Seach Routes --------------------------//
         // --------------------- login Routes --------------------------//
         { element: <PresidentLogin />, path: "/president/login", index: true },
         { element: <DirectorLogin />, path: "/director/login", index: true },

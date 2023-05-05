@@ -1,177 +1,127 @@
+import * as React from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import { MdNavigateBefore, MdNavigateNext } from 'react-icons/md';
-import Translate from '../../../static/DataLanguage.json';
-import { AiFillPrinter } from 'react-icons/ai';
+import { DataGridPro } from '@mui/x-data-grid-pro';
+import { Box, Button } from '@mui/material';
+import '../../export/styleFile.css';
+import DownloadIcon from '@mui/icons-material/Download';
+import html2pdf from 'html2pdf.js/dist/html2pdf.min';
 import { useNavigate } from 'react-router-dom';
 
-const TechniqueDep = () => {
-    const [Depart, setDepart] = useState([]);
-    const [contente, setContente] = useState("");
-    const navigate = useNavigate();
-    const [curentPage, setCurentPage] = useState(1);
-    const recordsPages = 18;
-    const lastIndex = curentPage * recordsPages;
-    const firstIndex = lastIndex - recordsPages;
-    const [filtring, setFiltring] = useState([]);
-    const [hundler, setHundler] = useState(false);
-    useEffect(() => {
-        const affiche = async () => {
-            const accesToken = localStorage.getItem("accessToken_technique");
-            console.log(accesToken);
-            if (accesToken === "undefined" || accesToken === null || accesToken === 0 || accesToken === false) {
-                navigate('/technique/login')
-            }
-            const res = await axios({
-                method: "get",
-                url: "http://localhost:8000/api/admin/technique/",
-                headers: {
-                    "Accept": "application/json",
-                    "Authorization": 'Bearer ' + accesToken
-                }
-            })
-            setDepart(res.data.depart)
-        }
-        affiche();
-    }, []);
-    const records = Depart.slice(firstIndex, lastIndex);
-    const nPages = Math.ceil(Depart.length / recordsPages)
 
-    const prePage = () => {
-        if (curentPage !== 1) {
-            setCurentPage(curentPage - 1)
-        }
-    }
-    const nextPage = () => {
-        if (curentPage !== nPages) {
-            setCurentPage(curentPage + 1)
-        }
-    }
-    useEffect(() => {
-        const lang = localStorage.getItem('lang');
-        if (lang === "ar") {
-            setContente(Translate.العربية)
+const DepExport = ({ row: rowProp }) => {
 
-        } else {
-            setContente(Translate.Français)
-        }
-    })
-    const navigEprt = (e) => {
-        navigate('/export/depart/' + e)
+    const exprt = () => {
+        var element = document.getElementById('file');
+        var opt = {
+            margin: 1,
+            filename: 'fichier(' + rowProp.id + ').pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+        html2pdf(element, opt);
     }
-    const Searching = (ev) => {
-        const query = ev.target.value
-        setFiltring(Depart.filter(item =>
-            item.numero === parseInt(query)
-        ))
-        if (query.length > 0) {
-            setHundler(true)
-        } else if (query === "") {
-            setHundler(false)
-        }
-    }
+
     return (
         <div>
-            <table className='table'>
-            <tr>
-                    <th colSpan={30}>
-                        <div className="header_controle">
-                            <ul className='list_pagination'>
-                                <li>
-                                    <MdNavigateBefore className='icon_pagination' onClick={prePage} />
-                                </li>
-                                <li>
-                                    <MdNavigateNext className='icon_pagination' onClick={nextPage} />
-                                </li>
-                            </ul>
-                            <input className='input_search' type="text" placeholder={contente.searching} onChange={Searching} />
+            <div className='export'>
+                <Box
+                    sx={{
+                        maxWidth: '100%',
+                    }}
+                >
+                    <Button size='small' onClick={exprt}><DownloadIcon /></Button>
+                </Box>
+                <div className='file-container'>
+
+                    <div className='file' id='file'>
+                        <div className='exp_header'>
+                            <img className='exp_img' src="/royal-maroc.png" alt="img" />
+                            <p className='title'>Commun taourirt</p>
+                            <p>{rowProp.id}</p>
                         </div>
-                    </th>
-                </tr>
-                <tr>
-                    <th colSpan={30}>{contente.fichier_depart}</th>
-                </tr>
-                <tr>
-                    <th className='space-header'></th>
-                    <th className='bordred-head'>{contente.numero}</th>
-                    <th className='space-header'></th>
-                    <th className='bordred-head'>{contente.objectif}</th>
-                    <th className='space-header'></th>
-                    <th className='bordred-head'>{contente.expediteur}</th>
-                    <th className='space-header'></th>
-                    <th className='bordred-head'>{contente.type_interet}</th>
-                    <th className='space-header'></th>
-                    <th className='bordred-head'>{contente.employe}</th>
-                    <th className='space-header'></th>
-                    <th className='bordred-head'>{contente.type_courier}</th>
-                    <th className='space-header'></th>
-                    <th className='bordred-head'>{contente.date_fichier}</th>
-                    <th className='space-header'></th>
-                    <th className='bordred-head'>{contente.date_commission}</th>
-                    <th className='space-header'></th>
-                    <th className='bordred-head'>{contente.date_specifie}</th>
-                    <th className='space-header'></th>
-                    <th className='space-header'></th>
-                </tr>
-                                {
-                    hundler?
-                    filtring.map((e) => {
-                        return (
-                            <tr>
-                                <td></td>
-                                <td>{e.numero}</td>
-                                <td></td>
-                                <td className='ellipsis'><p>{e.objectif}</p></td>
-                                <td></td>
-                                <td>{e.expediteur}</td>
-                                <td></td>
-                                <td className='ellipsis'><p>{e.interet}</p></td>
-                                <td></td>
-                                <td>{e.employere}</td>
-                                <td></td>
-                                <td>{e.type_de_courier}</td>
-                                <td></td>
-                                <td>{e.date_de_fichier}</td>
-                                <td></td>
-                                <td>{e.date_de_commission}</td>
-                                <td></td>
-                                <td>{e.date_specifiee}</td>
-                                <td></td>
-                                <td><AiFillPrinter className='edit-icon' onClick={() => navigEprt(e.numero)} /></td>
-                            </tr>
-                        )
-                    })
-                    :
-                    records.map((e) => {
-                        return (
-                            <tr>
-                                <td></td>
-                                <td>{e.numero}</td>
-                                <td></td>
-                                <td className='ellipsis'><p>{e.objectif}</p></td>
-                                <td></td>
-                                <td>{e.expediteur}</td>
-                                <td></td>
-                                <td className='ellipsis'><p>{e.interet}</p></td>
-                                <td></td>
-                                <td>{e.employere}</td>
-                                <td></td>
-                                <td>{e.type_de_courier}</td>
-                                <td></td>
-                                <td>{e.date_de_fichier}</td>
-                                <td></td>
-                                <td>{e.date_de_commission}</td>
-                                <td></td>
-                                <td>{e.date_specifiee}</td>
-                                <td></td>
-                                <td><AiFillPrinter className='edit-icon' onClick={() => navigEprt(e.numero)} /></td>
-                            </tr>
-                        )
-                    })
-                }
-            </table>
+                        <div className='exp_title'>
+                            <span >{rowProp.interet}</span>
+                        </div>
+                        <div className='exp_objectife'>
+                            <div>
+                                <h5>Sujet</h5>
+                            </div>
+                            <span >{rowProp.objectif}</span>
+                        </div>
+                        <div className='exp_footer'>
+                            <span>Fichier de depart</span>
+                            <span>Date de fichier : {rowProp.date_de_fichier}</span>
+                        </div>
+                        <div className='exp_signiature'>
+                            <span>Signature de president</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
     )
 }
 
-export default TechniqueDep
+export default function TechniqueDep() {
+    const [Depart, setDepart] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+    useEffect(() => {
+        const affiche = async () => {
+            const accesToken = localStorage.getItem("accessToken_technique");
+            if (accesToken == "undefined" || accesToken === null || accesToken === 0) {
+                navigate('/technique/login')
+            }
+            await axios({
+                method: "get",
+                url: "http://localhost:8000/api/admin/technique",
+                headers: {
+                    "Accept": "application/json",
+                    "Authorization": 'Bearer ' + accesToken
+                }
+            }).then((res) => {
+                setDepart(res.data.depart)
+                setLoading(false)
+            })
+        }
+        affiche();
+    }, []);
+
+    const columns = [
+        { field: 'id', headerName: 'Numero', type: 'number', width: 100 },
+        { field: 'objectif', headerName: 'Objectif', width: 400 },
+        { field: 'expediteur', headerName: 'Expediteur', width: 180 },
+        { field: 'type_de_courier', headerName: 'Type de courier', width: 180 },
+        { field: 'interet', headerName: 'Interet', width: 300 },
+        { field: 'type_de_class', headerName: 'Division', width: 210 },
+        { field: 'employere', headerName: 'employere', width: 210 },
+        { field: 'date_de_fichier', headerName: 'Date de fichier', width: 200 },
+        { field: 'date_de_commission', headerName: 'Date de commission', width: 200 },
+        { field: 'date_specifiee', headerName: 'Date specifiee', width: 200 },
+    ];
+    const getDetailPanelContent = React.useCallback(
+        ({ row }) => <DepExport row={row} />,
+        [],
+    );
+
+    const getDetailPanelHeight = React.useCallback(() => 600, []);
+
+    return (
+        <div className='table_container'>
+            <div style={{ maxHeight: 900, height: 900, width: '100%' }}>
+                <DataGridPro
+                    rows={Depart} columns={columns} loading={loading}
+                    getDetailPanelHeight={getDetailPanelHeight}
+                    getDetailPanelContent={getDetailPanelContent}
+                />
+            </div>
+
+
+        </div>
+    )
+}

@@ -1,129 +1,59 @@
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import IndexProfile from '../../components/profile/IndexProfile'
+import IndexParametre from '../../components/profile/IndexParametre';
+import { Button } from '@mui/material';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import Upload from '../../components/Itemes/Upload';
-import Translate from '../../static/DataLanguage.json';
-import { Menubar } from 'primereact/menubar';
 
 const SupAdminIndex = () => {
-    const [fullname, setFullName] = useState("");
-    const [email, setEmail] = useState("");
-    const [CIN, setCIN] = useState("");
-    const [username, setUsername] = useState("");
-    const navigate = useNavigate();
-    const [contente, setContente] = useState("");
-
-    useEffect(() => {
+    const [value, setValue] = React.useState('1');
+    const navigate = useNavigate()
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+    const logout = () =>{
         const accesToken = localStorage.getItem("accessToken");
-        if (accesToken === undefined || accesToken === null || accesToken === 0) {
-            navigate('/superadmin/login')
+        if (accesToken == "undefined" || accesToken === null || accesToken === 0) {
+            navigate('/employe/login')
         }
-        const affiche = async () => {
-            const res = await axios({
-                method: "get",
-                url: "http://localhost:8000/api/superadmin/",
-                headers: {
-                    "Accept": "application/json",
-                    "Authorization": 'Bearer ' + accesToken
-                }
-            })
-            setFullName(res.data.datas.fullname)
-            setEmail(res.data.datas.email)
-            setCIN(res.data.datas.CIN)
-            setUsername(res.data.datas.username)
-        }
+        axios({
+            method: 'delete',
+            url: 'http://localhost:8000/api/superadmin/logout',
+            headers: {
+                "Accept": "application/json",
+                "Authorization": 'Bearer ' + accesToken
+            }
+        })
 
-        affiche();
-    },[]);
+        localStorage.removeItem("accessToken");
+        navigate('/superadmin/login')
+    }
 
-    useEffect(() => {
-        const lang = localStorage.getItem('lang');
-        if (lang === "ar") {
-            setContente(Translate.العربية)
 
-        } else {
-            setContente(Translate.Français)
-        }
-    })
-    const items = [
-        {
-            label: contente.language,
-            icon: 'pi pi-language',
-            items: [
-                {
-                    label: 'Français',
-                    command: () => {
-                        localStorage.setItem('lang', 'fr')
-                        window.location.reload(true)
-                    }
-                },
-                {
-                    label: 'العربية',
-                    command: () => {
-                        localStorage.setItem('lang', 'ar')
-                        window.location.reload(true)
-                    }
-
-                },
-            ]
-        }
-    ];
     return (
         <div className='profile-container'>
+            <Box sx={{ width: '100%', typography: 'body1' }}>
+                <TabContext value={value}>
+                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                        <TabList onChange={handleChange} aria-label="lab API tabs example">
+                            <Tab label="Profile" value="1" />
+                            <Tab label="Parametre" value="2" />
+                            <div className='header_tab'>
+                                <Button type='submit' color="error" size="midume" onClick={logout}>Se déconnecter</Button>
+                            </div>
+                        </TabList>
+                    </Box>
+                    <TabPanel value="1"> <IndexProfile person={"superadmin"}/></TabPanel>
+                    <TabPanel value="2"><IndexParametre person={"superadmin"}/></TabPanel>
+                </TabContext>
 
-            <div className="profile-controle">
-                <div className="profile-header">
-                    <div className="profile-img-controle">
-                        <div className='img-container'>
-                            <Upload person={"superadmin"} />
-                        </div>
-                        <p className='profile-info-img'>{contente.partone}
-                            <p className='profile-info-text'>{contente.parttwo}</p>
-                        </p>
-                        <Menubar style={{ padding: "0", margin: "0" }} model={items} />
+            </Box>
 
-                    </div>
-                </div>
-                <div className='profile-column'>
-                    <div className='profile-data'>
-                        <p className='profile-info'>{contente.nom_complete}</p>
-                        <p >{fullname}</p>
-                    </div>
-                </div>
-            </div>
-            <div className='profile-controle'>
-                <div className='profile-header'>
-                    <div className="profile-data">
-                        <p>{contente.profile_info}</p>
-                    </div>
-                </div>
-                <div className='profile-column'>
-                    <div className='profile-data'>
-                        <p className='profile-info'>{contente.CIN}</p>
-                        <p >{CIN}</p>
-                    </div>
-                </div>
-
-            </div>
-            <div className='profile-controle'>
-                <div className='profile-header'>
-                    <div className="profile-data">
-                        <p>{contente.account_info}</p>
-                    </div>
-                </div>
-                <div className='profile-column'>
-                    <div className='profile-data'>
-                    <p className='profile-info'>{contente.email}</p>
-                        <p >{email}</p>
-                    </div>
-                </div>
-                <div className='profile-column'>
-                    <div className='profile-data'>
-                        <p className='profile-info'>{contente.username}</p>
-                        <p >{username}</p>
-                    </div>
-                </div>
-            </div>
         </div>
     )
 }

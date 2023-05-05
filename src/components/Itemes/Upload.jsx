@@ -405,7 +405,7 @@ const Upload = ({ person }) => {
   }
   return (
     <div>
-      <Avatar className='img' image={imageUrl} icon="pi pi-user" style={{ width: '180px', height: '180px', background: "#919191", color: "#fafafa" }} shape="circle" onClick={handleOpen} />
+      <Avatar className='img' image={imageUrl} icon="pi pi-user" style={{ width: '250px', height: '250px', background: "#919191", color: "#fafafa" }} shape="circle" onClick={handleOpen} />
       <Modal
         open={open}
         onClose={handleClose}

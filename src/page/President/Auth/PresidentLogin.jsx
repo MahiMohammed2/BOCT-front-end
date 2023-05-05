@@ -53,7 +53,7 @@ const PresidentLogin = () => {
             <div className='container-form'>
                 <form onSubmit={loginSubmit} className='form'>
                 {errorPassing ?
-                        <div className='error_message'>Missing Username or Password</div>
+                        <div className='error_message'>Le password ou l'username est pas correct</div>
                         :
                         ""}
                     <h1>Login</h1>

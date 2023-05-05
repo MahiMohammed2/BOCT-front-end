@@ -35,7 +35,7 @@ const deleteAdmin = async() => {
     }
   })
   const alertMessage = ()=>{
-    const comfirmer = contente.delete_info
+    const comfirmer = contente.delete_info_admin
     if ( window.confirm(comfirmer) === true) {
       return deleteAdmin();
     }
