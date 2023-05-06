@@ -84,7 +84,7 @@ export default function DrawerSup() {
                     </ListItem>
                 </List>
             </NavLink>
-            <NavLink to='/superadmin/financier' className={"links"}>
+            <NavLink to='/superadmin/finencier' className={"links"}>
                 <List>
                     <ListItem disablePadding>
                         <ListItemButton>

@@ -42,7 +42,7 @@ const EditAdministrative = ({ id }) => {
     formData.append('username', username);
     formData.append('password', password);
 
-    const accesToken = localStorage.getItem("accessToken");
+    const accesToken = localStorage.getItem("accessToken_dir");
     await axios({
       method: "post",
       url: "http://localhost:8000/api/director/editSuperAdmin/" + id,
@@ -162,7 +162,6 @@ const AddAdmin = () => {
     formData.append('email', email);
     formData.append('username', username);
     formData.append('password', password);
-
     const accesToken = localStorage.getItem("accessToken_dir");
     await axios({
       method: "post",
